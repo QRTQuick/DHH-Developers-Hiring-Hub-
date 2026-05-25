@@ -4,38 +4,38 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
-.Python
-env/
+
+# Build and distribution artifacts
+build/
+dist/
+*.egg-info/
+
+# Virtual environments
 venv/
 .venv/
-.venv.bak/
-pip-log.txt
-pip-delete-this-directory.txt
-.tox/
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-*.log
-*.pot
-*.pyc
-*.pyo
-*.pyd
-.MF
-tags
-TAGS
-.IDE/
+.env
+.env.local
+*.env.*
+
+# Editors
 .vscode/
 .idea/
 *.swp
 *.swo
-*~
+
+# Logs
+*.log
+
+# OS
 .DS_Store
 Thumbs.db
-.env
-.env.local
-.env.*
-!.env.example
+
+# Coverage
+.coverage
+coverage/
+htmlcov/
+
+# Testing
+.pytest_cache/
+.mypy_cache/
 ```
