@@ -19,5 +19,6 @@
       "src": "/(.*)",
       "dest": "backend/run.py"
     }
-  ]
+  ],
+  "outputDirectory": "backend/frontend"
 }

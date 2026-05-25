@@ -8,8 +8,12 @@ class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY', 'dhh-secret-key-12345')
     
     # Vercel PostgreSQL compatibility
-    DATABASE_URL = os.environ.get('DATABASE_URL', os.environ.get('POSTGRES_URL', 'postgresql://user:pass@localhost/dhh_db'))
-    SQLALCHEMY_DATABASE_URI = DATABASE_URL
+    DATABASE_URL = os.environ.get('DATABASE_URL', os.environ.get('POSTGRES_URL'))
+    if DATABASE_URL:
+        SQLALCHEMY_DATABASE_URI = DATABASE_URL
+    else:
+        # Fallback to SQLite for local development without DB
+        SQLALCHEMY_DATABASE_URI = 'sqlite:///dhh_db.sqlite'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     
     JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY', 'jwt-secret-key-67890')
