@@ -3,10 +3,15 @@
   "builds": [
     {
       "src": "backend/run.py",
-      "use": "@vercel/python"
+      "use": "@vercel/python",
+      "config": { "maxLambdaSize": "15mb" }
     }
   ],
   "routes": [
+    {
+      "src": "/static/(.*)",
+      "dest": "backend/run.py"
+    },
     {
       "src": "/api/(.*)",
       "dest": "backend/run.py"
@@ -19,5 +24,8 @@
       "src": "/(.*)",
       "dest": "backend/run.py"
     }
-  ]
+  ],
+  "env": {
+    "FLASK_ENV": "production"
+  }
 }

@@ -53,6 +53,18 @@ def create_app(config_class=Config):
     with app.app_context():
         from .utils import socket_events
 
+    # Error handlers
+    @app.errorhandler(404)
+    def not_found(error):
+        from flask import jsonify
+        return jsonify({'error': 'Not Found'}), 404
+    
+    @app.errorhandler(500)
+    def internal_error(error):
+        from flask import jsonify
+        db.session.rollback()
+        return jsonify({'error': 'Internal Server Error'}), 500
+
     # Serve frontend static files for root and unknown routes
     @app.route('/')
     def serve_index():
@@ -81,9 +93,10 @@ def create_app(config_class=Config):
 
     @app.route('/<path:path>')
     def serve_catch_all(path):
-        # Skip API and socket.io routes
+        # Skip API and socket.io routes - let Flask handle 404
         if path.startswith('api/') or path.startswith('socket.io/'):
-            return None  # Let the route not match
+            from flask import jsonify
+            return jsonify({'error': 'Not Found'}), 404
         # Try to serve the requested file
         try:
             return send_from_directory(base_dir, path)
