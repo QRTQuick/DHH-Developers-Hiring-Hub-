@@ -18,7 +18,18 @@ limiter = Limiter(key_func=get_remote_address)
 socketio = SocketIO()
 
 def create_app(config_class=Config):
-    app = Flask(__name__, static_folder='frontend/static', static_url_path='/static')
+    # Determine the base directory for Vercel vs local
+    if os.environ.get('VERCEL'):
+        # On Vercel, frontend is relative to this file's parent (app/)
+        base_dir = os.path.join(os.path.dirname(__file__), '..', 'frontend')
+    else:
+        # Local development
+        base_dir = os.path.join(os.path.dirname(__file__), '..', 'frontend')
+    
+    app = Flask(__name__, 
+                static_folder=os.path.join(base_dir, 'static'), 
+                static_url_path='/static',
+                template_folder=base_dir)
     app.config.from_object(config_class)
 
     db.init_app(app)
@@ -45,33 +56,27 @@ def create_app(config_class=Config):
     # Serve frontend static files for root and unknown routes
     @app.route('/')
     def serve_index():
-        frontend_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'frontend')
-        return send_from_directory(frontend_dir, 'index.html')
+        return send_from_directory(base_dir, 'index.html')
 
     @app.route('/search.html')
     def serve_search():
-        frontend_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'frontend')
-        return send_from_directory(frontend_dir, 'search.html')
+        return send_from_directory(base_dir, 'search.html')
 
     @app.route('/dashboard.html')
     def serve_dashboard():
-        frontend_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'frontend')
-        return send_from_directory(frontend_dir, 'dashboard.html')
+        return send_from_directory(base_dir, 'dashboard.html')
 
     @app.route('/sitemap.xml')
     def serve_sitemap():
-        frontend_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'frontend')
-        return send_from_directory(frontend_dir, 'sitemap.xml'), 200, {'Content-Type': 'application/xml'}
+        return send_from_directory(base_dir, 'sitemap.xml'), 200, {'Content-Type': 'application/xml'}
 
     @app.route('/robots.txt')
     def serve_robots():
-        frontend_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'frontend')
-        return send_from_directory(frontend_dir, 'robots.txt'), 200, {'Content-Type': 'text/plain'}
+        return send_from_directory(base_dir, 'robots.txt'), 200, {'Content-Type': 'text/plain'}
 
     @app.route('/static/<path:path>')
     def serve_static_files(path):
-        frontend_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'frontend')
-        static_dir = os.path.join(frontend_dir, 'static')
+        static_dir = os.path.join(base_dir, 'static')
         return send_from_directory(static_dir, path)
 
     @app.route('/<path:path>')
@@ -79,12 +84,11 @@ def create_app(config_class=Config):
         # Skip API and socket.io routes
         if path.startswith('api/') or path.startswith('socket.io/'):
             return None  # Let the route not match
-        frontend_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'frontend')
         # Try to serve the requested file
         try:
-            return send_from_directory(frontend_dir, path)
+            return send_from_directory(base_dir, path)
         except FileNotFoundError:
             # If file not found, serve index.html for SPA routing
-            return send_from_directory(frontend_dir, 'index.html')
+            return send_from_directory(base_dir, 'index.html')
 
     return app
