@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Talent | DHH — Developers Hiring Hub</title>
+    <link rel="stylesheet" href="static/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        .search-container {
+            padding-top: 120px;
+        }
+        .filter-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+        .search-input {
+            flex: 1;
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            padding: 12px 20px;
+            color: #fff;
+            border-radius: 8px;
+            outline: none;
+        }
+        .search-input:focus {
+            border-color: var(--teal);
+        }
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+        .dev-card {
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        .dev-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .dev-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+        }
+        .score-pill {
+            background: var(--teal);
+            color: #000;
+            padding: 2px 10px;
+            border-radius: 4px;
+            font-weight: 800;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container" style="display:flex; justify-content: space-between; align-items: center; width: 100%;">
+            <div class="logo">DHH <span>•</span> Hub</div>
+            <nav>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/search.html">Search Developers</a></li>
+                </ul>
+            </nav>
+            <div class="auth-btns">
+                <a href="/dashboard.html" class="btn btn-primary">Dashboard</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="container search-container">
+        <h2 class="reveal" style="margin-bottom: 2rem;">Discover <span class="gradient-text">Top Engineers</span></h2>
+        
+        <div class="filter-bar reveal">
+            <input type="text" class="search-input" placeholder="Search by skill, name or bio...">
+            <input type="text" class="search-input" style="max-width: 200px;" placeholder="Location">
+            <button class="btn btn-primary">Search</button>
+        </div>
+
+        <div class="results-grid">
+            <!-- Mock Result 1 -->
+            <div class="card glass dev-card reveal">
+                <div class="dev-info">
+                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" class="dev-avatar" alt="">
+                    <div>
+                        <h4 style="margin:0;">Jonathan Doe</h4>
+                        <p style="font-size: 0.8rem; color: var(--text-dim);">@jdoe_ops • London, UK</p>
+                    </div>
+                    <div style="margin-left: auto;">
+                        <span class="score-pill">94</span>
+                    </div>
+                </div>
+                <p style="font-size: 0.9rem; color: var(--text-dim);">
+                    Full-stack engineer specializing in high-performance Python backends and React frontends. Active contributor to Kubernetes.
+                </p>
+                <div style="display: flex; gap: 5px; flex-wrap: wrap;">
+                    <span class="badge">Python</span>
+                    <span class="badge">Go</span>
+                    <span class="badge">AWS</span>
+                    <span class="badge">React</span>
+                </div>
+                <button class="btn btn-outline" style="width: 100%;">View Profile</button>
+            </div>
+
+            <!-- Mock Result 2 -->
+            <div class="card glass dev-card reveal">
+                <div class="dev-info">
+                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah" class="dev-avatar" alt="">
+                    <div>
+                        <h4 style="margin:0;">Sarah Smith</h4>
+                        <p style="font-size: 0.8rem; color: var(--text-dim);">@ssmith_dev • Berlin, DE</p>
+                    </div>
+                    <div style="margin-left: auto;">
+                        <span class="score-pill">88</span>
+                    </div>
+                </div>
+                <p style="font-size: 0.9rem; color: var(--text-dim);">
+                    Machine Learning Engineer with focus on NLP and LLM fine-tuning. Previously at DeepMind.
+                </p>
+                <div style="display: flex; gap: 5px; flex-wrap: wrap;">
+                    <span class="badge">PyTorch</span>
+                    <span class="badge">FastAPI</span>
+                    <span class="badge">Transformers</span>
+                </div>
+                <button class="btn btn-outline" style="width: 100%;">View Profile</button>
+            </div>
+
+            <!-- Mock Result 3 -->
+            <div class="card glass dev-card reveal">
+                <div class="dev-info">
+                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Ken" class="dev-avatar" alt="">
+                    <div>
+                        <h4 style="margin:0;">Ken Chen</h4>
+                        <p style="font-size: 0.8rem; color: var(--text-dim);">@kchen • SF, USA</p>
+                    </div>
+                    <div style="margin-left: auto;">
+                        <span class="score-pill">91</span>
+                    </div>
+                </div>
+                <p style="font-size: 0.9rem; color: var(--text-dim);">
+                    Open source enthusiast. Maintainer of several popular JavaScript libraries.
+                </p>
+                <div style="display: flex; gap: 5px; flex-wrap: wrap;">
+                    <span class="badge">TypeScript</span>
+                    <span class="badge">Node.js</span>
+                    <span class="badge">WebAssembly</span>
+                </div>
+                <button class="btn btn-outline" style="width: 100%;">View Profile</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        gsap.from('.reveal', { 
+            y: 30, 
+            opacity: 0, 
+            duration: 0.8, 
+            stagger: 0.1, 
+            ease: 'power3.out' 
+        });
+    </script>
+</body>
+</html>
