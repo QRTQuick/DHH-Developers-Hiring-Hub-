@@ -1,12 +1,41 @@
 ```
 # Dependencies
-node_modules/
-
-# Editors
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+.venv.bak/
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+*.pot
+*.pyc
+*.pyo
+*.pyd
+.MF
+tags
+TAGS
+.IDE/
 .vscode/
-
-# Environment
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
 .env
 .env.local
-.env.
+.env.*
+!.env.example
 ```
