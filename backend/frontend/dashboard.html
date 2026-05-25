@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | DHH — Developers Hiring Hub</title>
+    <link rel="stylesheet" href="static/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        body {
+            display: flex;
+            min-height: 100vh;
+        }
+        .sidebar {
+            width: 260px;
+            border-right: 1px solid var(--glass-border);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            position: fixed;
+            height: 100vh;
+        }
+        .main-content {
+            margin-left: 260px;
+            flex: 1;
+            padding: 2rem 4rem;
+        }
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-dim);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 10px;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+        .nav-item:hover, .nav-item.active {
+            background: var(--card-bg);
+            color: var(--teal);
+        }
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 2px solid var(--teal);
+            background: #222;
+        }
+        .score-card {
+            text-align: center;
+            padding: 1.5rem;
+        }
+        .score-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--teal);
+            margin-bottom: 5px;
+        }
+        .score-label {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            background: rgba(0, 242, 255, 0.1);
+            color: var(--teal);
+            border: 1px solid rgba(0, 242, 255, 0.2);
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo">DHH <span>•</span> Hub</div>
+        <nav style="flex:1;">
+            <a href="#" class="nav-item active">Dashboard</a>
+            <a href="#" class="nav-item">My Profile</a>
+            <a href="#" class="nav-item">Analytics</a>
+            <a href="#" class="nav-item">Jobs & Matches</a>
+            <a href="#" class="nav-item">Messages</a>
+        </nav>
+        <div class="user-footer">
+            <a href="/" class="nav-item">Logout</a>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="profile-header reveal">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Avatar" class="avatar" id="profile-avatar">
+            <div>
+                <h1 id="profile-name">Alex Rivera</h1>
+                <p style="color: var(--text-dim);" id="profile-username">@arivera_dev</p>
+                <div style="margin-top: 10px;">
+                    <span class="badge">Open Source Hero</span>
+                    <span class="badge">Backend Architect</span>
+                </div>
+            </div>
+            <div style="margin-left: auto;">
+                <button class="btn btn-primary" onclick="syncGitHub()">Sync GitHub</button>
+            </div>
+        </div>
+
+        <div class="feature-grid reveal" style="margin-bottom: 2rem;">
+            <div class="card glass score-card">
+                <div class="score-value" id="overall-score">84</div>
+                <div class="score-label">Overall Score</div>
+            </div>
+            <div class="card glass score-card">
+                <div class="score-value" id="trust-score">92</div>
+                <div class="score-label">Trust Score</div>
+            </div>
+            <div class="card glass score-card">
+                <div class="score-value" id="project-score">78</div>
+                <div class="score-label">Project Score</div>
+            </div>
+            <div class="card glass score-card">
+                <div class="score-value" id="consistency-score">88</div>
+                <div class="score-label">Consistency</div>
+            </div>
+        </div>
+
+        <div class="grid-2">
+            <div class="card glass reveal">
+                <h3>Technical Activity</h3>
+                <div style="height: 200px; display: flex; align-items: flex-end; gap: 8px; margin-top: 20px;">
+                    <!-- Simple Heatmap Mockup -->
+                    <div style="flex:1; background: var(--teal); height: 40%; border-radius: 4px;"></div>
+                    <div style="flex:1; background: var(--teal); height: 70%; border-radius: 4px;"></div>
+                    <div style="flex:1; background: var(--teal); height: 90%; border-radius: 4px;"></div>
+                    <div style="flex:1; background: var(--teal); height: 60%; border-radius: 4px;"></div>
+                    <div style="flex:1; background: var(--teal); height: 85%; border-radius: 4px;"></div>
+                    <div style="flex:1; background: var(--orange-red); height: 100%; border-radius: 4px;"></div>
+                    <div style="flex:1; background: var(--teal); height: 50%; border-radius: 4px;"></div>
+                </div>
+            </div>
+            <div class="card glass reveal">
+                <h3>Top Repositories</h3>
+                <ul style="list-style: none; margin-top: 20px;">
+                    <li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid var(--glass-border);">
+                        <div style="font-weight: 600; color: var(--teal);">dhh-core-engine</div>
+                        <p style="font-size: 0.85rem; color: var(--text-dim);">Python • 1.2k stars • 240 forks</p>
+                    </li>
+                    <li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid var(--glass-border);">
+                        <div style="font-weight: 600; color: var(--teal);">distributed-cache-lib</div>
+                        <p style="font-size: 0.85rem; color: var(--text-dim);">Go • 450 stars • 80 forks</p>
+                    </li>
+                    <li>
+                        <div style="font-weight: 600; color: var(--teal);">react-glass-ui</div>
+                        <p style="font-size: 0.85rem; color: var(--text-dim);">TypeScript • 890 stars • 110 forks</p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Basic entry animations
+        gsap.from('.sidebar', { x: -100, opacity: 0, duration: 1, ease: 'power3.out' });
+        gsap.from('.reveal', { 
+            y: 30, 
+            opacity: 0, 
+            duration: 0.8, 
+            stagger: 0.2, 
+            ease: 'power3.out' 
+        });
+
+        async function syncGitHub() {
+            const username = prompt("Enter your GitHub username:");
+            if (!username) return;
+
+            // Mocking the sync process for frontend demo
+            const btn = document.querySelector('.btn-primary');
+            btn.innerText = "Syncing...";
+            btn.disabled = true;
+
+            setTimeout(() => {
+                btn.innerText = "Sync GitHub";
+                btn.disabled = false;
+                alert("GitHub Profile Synced! (Simulated)");
+                document.getElementById('profile-username').innerText = '@' + username;
+                document.getElementById('overall-score').innerText = Math.floor(Math.random() * 20) + 75;
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

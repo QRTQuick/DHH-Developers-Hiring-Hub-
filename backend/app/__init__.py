@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
@@ -8,6 +8,7 @@ from flask_limiter.util import get_remote_address
 from flask_caching import Cache
 from flask_socketio import SocketIO
 from .config import Config
+import os
 
 db = SQLAlchemy()
 jwt = JWTManager()
@@ -40,5 +41,50 @@ def create_app(config_class=Config):
     # Register socket events
     with app.app_context():
         from .utils import socket_events
+
+    # Serve frontend static files for root and unknown routes
+    @app.route('/')
+    def serve_index():
+        frontend_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'frontend')
+        return send_from_directory(frontend_dir, 'index.html')
+
+    @app.route('/search.html')
+    def serve_search():
+        frontend_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'frontend')
+        return send_from_directory(frontend_dir, 'search.html')
+
+    @app.route('/dashboard.html')
+    def serve_dashboard():
+        frontend_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'frontend')
+        return send_from_directory(frontend_dir, 'dashboard.html')
+
+    @app.route('/sitemap.xml')
+    def serve_sitemap():
+        frontend_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'frontend')
+        return send_from_directory(frontend_dir, 'sitemap.xml'), 200, {'Content-Type': 'application/xml'}
+
+    @app.route('/robots.txt')
+    def serve_robots():
+        frontend_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'frontend')
+        return send_from_directory(frontend_dir, 'robots.txt'), 200, {'Content-Type': 'text/plain'}
+
+    @app.route('/static/<path:path>')
+    def serve_static_files(path):
+        frontend_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'frontend')
+        static_dir = os.path.join(frontend_dir, 'static')
+        return send_from_directory(static_dir, path)
+
+    @app.route('/<path:path>')
+    def serve_catch_all(path):
+        # Skip API and socket.io routes
+        if path.startswith('api/') or path.startswith('socket.io/'):
+            return None  # Let the route not match
+        frontend_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'frontend')
+        # Try to serve the requested file
+        try:
+            return send_from_directory(frontend_dir, path)
+        except FileNotFoundError:
+            # If file not found, serve index.html for SPA routing
+            return send_from_directory(frontend_dir, 'index.html')
 
     return app
