@@ -16,28 +16,40 @@
       "dest": "backend/run.py"
     },
     {
+      "src": "/socket.io/(.*)",
+      "dest": "backend/run.py"
+    },
+    {
       "src": "/static/(.*)",
       "dest": "frontend/static/$1"
     },
     {
       "src": "/$",
-      "dest": "frontend/index.html"
+      "dest": "/frontend/index.html"
     },
     {
-      "src": "/search",
-      "dest": "frontend/search.html"
+      "src": "/index.html",
+      "dest": "/frontend/index.html"
     },
     {
-      "src": "/dashboard",
-      "dest": "frontend/dashboard.html"
+      "src": "/search.html",
+      "dest": "/frontend/search.html"
+    },
+    {
+      "src": "/dashboard.html",
+      "dest": "/frontend/dashboard.html"
     },
     {
       "src": "/sitemap.xml",
-      "dest": "frontend/sitemap.xml"
+      "dest": "/frontend/sitemap.xml"
     },
     {
       "src": "/robots.txt",
-      "dest": "frontend/robots.txt"
+      "dest": "/frontend/robots.txt"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/frontend/$1"
     }
   ]
 }
