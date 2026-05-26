@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DHH — Developers Hiring Hub | Hire Based on Real Code</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <!-- Three.js Background Canvas -->
+    <canvas id="three-canvas"></canvas>
+    
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <span class="logo-icon"><i class="fas fa-code"></i></span>
+                <span class="logo-text">DHH</span>
+            </a>
+            
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#developers">Developers</a></li>
+                <li><a href="#recruiters">Recruiters</a></li>
+                <li><a href="#testimonials">Testimonials</a></li>
+            </ul>
+            
+            <div class="nav-actions">
+                <button class="btn btn-outline" id="loginBtn">Sign In</button>
+                <button class="btn btn-primary" id="earlyAccessBtn">Join Early Access</button>
+            </div>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <ul>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#developers">Developers</a></li>
+            <li><a href="#recruiters">Recruiters</a></li>
+            <li><a href="#testimonials">Testimonials</a></li>
+            <li><a href="#" class="mobile-login">Sign In</a></li>
+        </ul>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="badge-glow"></span>
+                <span>🚀 Now in Beta</span>
+            </div>
+            
+            <h1 class="hero-title">
+                Hire Developers<br>
+                <span class="gradient-text">Based On Real Code</span>
+            </h1>
+            
+            <p class="hero-subtitle">
+                Discover software engineers through GitHub projects, repositories, commits, 
+                and real technical activity. No more resume games.
+            </p>
+            
+            <div class="hero-buttons">
+                <button class="btn btn-primary btn-large" id="heroEarlyAccess">
+                    <i class="fas fa-rocket"></i>
+                    Join Early Access
+                </button>
+                <button class="btn btn-outline btn-large" id="exploreDevelopers">
+                    <i class="fas fa-search"></i>
+                    Explore Developers
+                </button>
+            </div>
+            
+            <div class="hero-stats-preview">
+                <div class="stat-item">
+                    <span class="stat-number" data-target="15000">0</span>
+                    <span class="stat-label">Developers</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <span class="stat-number" data-target="50000">0</span>
+                    <span class="stat-label">Repositories</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <span class="stat-number" data-target="500">0</span>
+                    <span class="stat-label">Companies</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="hero-visual">
+            <div class="dashboard-mockup">
+                <div class="dashboard-header">
+                    <div class="dashboard-dots">
+                        <span class="dot red"></span>
+                        <span class="dot yellow"></span>
+                        <span class="dot green"></span>
+                    </div>
+                    <span class="dashboard-title">Developer Analytics</span>
+                </div>
+                <div class="dashboard-content">
+                    <div class="profile-card">
+                        <div class="profile-avatar">
+                            <i class="fab fa-github"></i>
+                        </div>
+                        <div class="profile-info">
+                            <h4>Alex Chen</h4>
+                            <p>Full Stack Developer</p>
+                        </div>
+                        <div class="profile-score">
+                            <span class="score-number">94</span>
+                            <span class="score-label">Reputation</span>
+                        </div>
+                    </div>
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <i class="fas fa-code-branch"></i>
+                            <span>2.4k Commits</span>
+                        </div>
+                        <div class="metric-card">
+                            <i class="fas fa-star"></i>
+                            <span>1.8k Stars</span>
+                        </div>
+                        <div class="metric-card">
+                            <i class="fas fa-users"></i>
+                            <span>45 Projects</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="scroll-indicator">
+            <div class="mouse">
+                <div class="wheel"></div>
+            </div>
+            <span>Scroll to explore</span>
+        </div>
+    </section>
+
+    <!-- Live Stats Section -->
+    <section class="stats-section" id="stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card" data-aos="fade-up">
+                    <i class="fas fa-user-plus stat-icon"></i>
+                    <div class="stat-content">
+                        <span class="stat-number animate-count" data-target="15247">0</span>
+                        <span class="stat-suffix">+</span>
+                        <span class="stat-label">Developers Joined</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card" data-aos="fade-up" data-aos-delay="100">
+                    <i class="fab fa-github stat-icon"></i>
+                    <div class="stat-content">
+                        <span class="stat-number animate-count" data-target="52891">0</span>
+                        <span class="stat-suffix">+</span>
+                        <span class="stat-label">Repos Scanned</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card" data-aos="fade-up" data-aos-delay="200">
+                    <i class="fas fa-building stat-icon"></i>
+                    <div class="stat-content">
+                        <span class="stat-number animate-count" data-target="523">0</span>
+                        <span class="stat-suffix">+</span>
+                        <span class="stat-label">Companies Hiring</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card" data-aos="fade-up" data-aos-delay="300">
+                    <i class="fas fa-chart-line stat-icon"></i>
+                    <div class="stat-content">
+                        <span class="stat-number animate-count" data-target="1250000">0</span>
+                        <span class="stat-suffix">+</span>
+                        <span class="stat-label">Commits Analyzed</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why DHH Section -->
+    <section class="why-section" id="why">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Why DHH?</span>
+                <h2>The Old Way is <span class="gradient-text">Broken</span></h2>
+                <p>Traditional hiring misses great developers. We fix that.</p>
+            </div>
+            
+            <div class="why-grid">
+                <div class="why-card">
+                    <div class="card-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <h3>Resumes Are Outdated</h3>
+                    <p>Paper credentials don't prove coding ability. Real code does.</p>
+                    <div class="card-glow"></div>
+                </div>
+                
+                <div class="why-card featured">
+                    <div class="card-icon">
+                        <i class="fab fa-github"></i>
+                    </div>
+                    <h3>GitHub Proves Skill</h3>
+                    <p>Your commits, contributions, and projects tell your real story.</p>
+                    <div class="card-glow"></div>
+                </div>
+                
+                <div class="why-card">
+                    <div class="card-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>AI-Powered Insights</h3>
+                    <p>Advanced algorithms analyze code quality and technical depth.</p>
+                    <div class="card-glow"></div>
+                </div>
+                
+                <div class="why-card">
+                    <div class="card-icon">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <h3>Better Visibility</h3>
+                    <p>Developers get discovered based on actual work, not connections.</p>
+                    <div class="card-glow"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section" id="features">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Features</span>
+                <h2>Everything You Need to <span class="gradient-text">Hire Better</span></h2>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fab fa-github"></i>
+                    </div>
+                    <h3>GitHub-Powered Profiles</h3>
+                    <p>Automatic profile generation from real GitHub activity and contributions.</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> Repo analysis</li>
+                        <li><i class="fas fa-check"></i> Commit history</li>
+                        <li><i class="fas fa-check"></i> Contribution graph</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <h3>Developer Scoring</h3>
+                    <p>Proprietary algorithm calculates developer reputation based on multiple factors.</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> Code quality metrics</li>
+                        <li><i class="fas fa-check"></i> Project impact</li>
+                        <li><i class="fas fa-check"></i> Community engagement</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3>AI Hiring System</h3>
+                    <p>Machine learning matches candidates with perfect job opportunities.</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> Smart matching</li>
+                        <li><i class="fas fa-check"></i> Skill inference</li>
+                        <li><i class="fas fa-check"></i> Culture fit analysis</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <h3>Repository Analytics</h3>
+                    <p>Deep insights into code quality, architecture, and development practices.</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> Code complexity</li>
+                        <li><i class="fas fa-check"></i> Tech stack detection</li>
+                        <li><i class="fas fa-check"></i> Activity patterns</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3>Activity Tracking</h3>
+                    <p>Real-time monitoring of developer contributions and project involvement.</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> Live updates</li>
+                        <li><i class="fas fa-check"></i> Trend analysis</li>
+                        <li><i class="fas fa-check"></i> Consistency scoring</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3>Smart Search</h3>
+                    <p>Find the perfect developer with advanced filtering and AI recommendations.</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> Skill-based filters</li>
+                        <li><i class="fas fa-check"></i> Location preferences</li>
+                        <li><i class="fas fa-check"></i> Availability status</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3D Interactive Showcase -->
+    <section class="showcase-section" id="showcase">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Interactive</span>
+                <h2>Experience the <span class="gradient-text">Future</span></h2>
+                <p>Move your cursor to interact with our holographic developer network</p>
+            </div>
+            
+            <div class="showcase-container">
+                <canvas id="showcase-canvas"></canvas>
+                <div class="showcase-overlay">
+                    <div class="hologram-card">
+                        <i class="fas fa-user-astronaut"></i>
+                        <span>Developer Node</span>
+                    </div>
+                    <div class="hologram-card">
+                        <i class="fas fa-network-wired"></i>
+                        <span>Network Link</span>
+                    </div>
+                    <div class="hologram-card">
+                        <i class="fas fa-brain"></i>
+                        <span>AI Analysis</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Developer Showcase -->
+    <section class="developers-section" id="developers">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Talent Pool</span>
+                <h2>Meet Top <span class="gradient-text">Developers</span></h2>
+                <p>Real profiles from our growing community</p>
+            </div>
+            
+            <div class="developers-grid">
+                <div class="dev-card">
+                    <div class="dev-avatar">
+                        <i class="fab fa-github"></i>
+                    </div>
+                    <div class="dev-info">
+                        <h4>Sarah Martinez</h4>
+                        <p class="dev-role">Senior Full Stack Engineer</p>
+                        <div class="dev-stack">
+                            <span class="tech-tag">React</span>
+                            <span class="tech-tag">Node.js</span>
+                            <span class="tech-tag">TypeScript</span>
+                        </div>
+                    </div>
+                    <div class="dev-stats">
+                        <div class="dev-stat">
+                            <span class="stat-val">2.8k</span>
+                            <span class="stat-lbl">Commits</span>
+                        </div>
+                        <div class="dev-stat">
+                            <span class="stat-val">4.2k</span>
+                            <span class="stat-lbl">Stars</span>
+                        </div>
+                        <div class="dev-score">
+                            <span class="score">96</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="dev-card">
+                    <div class="dev-avatar">
+                        <i class="fab fa-github"></i>
+                    </div>
+                    <div class="dev-info">
+                        <h4>Marcus Johnson</h4>
+                        <p class="dev-role">Backend Architect</p>
+                        <div class="dev-stack">
+                            <span class="tech-tag">Python</span>
+                            <span class="tech-tag">Go</span>
+                            <span class="tech-tag">PostgreSQL</span>
+                        </div>
+                    </div>
+                    <div class="dev-stats">
+                        <div class="dev-stat">
+                            <span class="stat-val">3.5k</span>
+                            <span class="stat-lbl">Commits</span>
+                        </div>
+                        <div class="dev-stat">
+                            <span class="stat-val">5.1k</span>
+                            <span class="stat-lbl">Stars</span>
+                        </div>
+                        <div class="dev-score">
+                            <span class="score">98</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="dev-card">
+                    <div class="dev-avatar">
+                        <i class="fab fa-github"></i>
+                    </div>
+                    <div class="dev-info">
+                        <h4>Emily Zhang</h4>
+                        <p class="dev-role">ML Engineer</p>
+                        <div class="dev-stack">
+                            <span class="tech-tag">Python</span>
+                            <span class="tech-tag">TensorFlow</span>
+                            <span class="tech-tag">PyTorch</span>
+                        </div>
+                    </div>
+                    <div class="dev-stats">
+                        <div class="dev-stat">
+                            <span class="stat-val">1.9k</span>
+                            <span class="stat-lbl">Commits</span>
+                        </div>
+                        <div class="dev-stat">
+                            <span class="stat-val">3.7k</span>
+                            <span class="stat-lbl">Stars</span>
+                        </div>
+                        <div class="dev-score">
+                            <span class="score">95</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="dev-card">
+                    <div class="dev-avatar">
+                        <i class="fab fa-github"></i>
+                    </div>
+                    <div class="dev-info">
+                        <h4>David Kim</h4>
+                        <p class="dev-role">DevOps Engineer</p>
+                        <div class="dev-stack">
+                            <span class="tech-tag">Kubernetes</span>
+                            <span class="tech-tag">AWS</span>
+                            <span class="tech-tag">Terraform</span>
+                        </div>
+                    </div>
+                    <div class="dev-stats">
+                        <div class="dev-stat">
+                            <span class="stat-val">2.1k</span>
+                            <span class="stat-lbl">Commits</span>
+                        </div>
+                        <div class="dev-stat">
+                            <span class="stat-val">2.9k</span>
+                            <span class="stat-lbl">Stars</span>
+                        </div>
+                        <div class="dev-score">
+                            <span class="score">93</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="view-all-wrapper">
+                <button class="btn btn-outline btn-large">
+                    View All Developers
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recruiter Section -->
+    <section class="recruiter-section" id="recruiters">
+        <div class="container">
+            <div class="recruiter-layout">
+                <div class="recruiter-content">
+                    <span class="section-tag">For Recruiters</span>
+                    <h2>Hire With <span class="gradient-text">Confidence</span></h2>
+                    <p>Our recruiter dashboard gives you superpowers to find and evaluate top talent.</p>
+                    
+                    <ul class="recruiter-features">
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>Advanced candidate filtering by tech stack</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>Real-time GitHub activity monitoring</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>AI-powered candidate recommendations</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>Detailed technical assessment reports</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>Direct messaging and interview scheduling</span>
+                        </li>
+                    </ul>
+                    
+                    <button class="btn btn-primary btn-large">
+                        Get Started for Free
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+                
+                <div class="recruiter-dashboard">
+                    <div class="dashboard-window">
+                        <div class="window-header">
+                            <div class="window-dots">
+                                <span class="dot red"></span>
+                                <span class="dot yellow"></span>
+                                <span class="dot green"></span>
+                            </div>
+                            <span>DHH Recruiter Dashboard</span>
+                        </div>
+                        <div class="window-content">
+                            <div class="dash-sidebar">
+                                <div class="dash-nav-item active">
+                                    <i class="fas fa-users"></i>
+                                    <span>Candidates</span>
+                                </div>
+                                <div class="dash-nav-item">
+                                    <i class="fas fa-briefcase"></i>
+                                    <span>Jobs</span>
+                                </div>
+                                <div class="dash-nav-item">
+                                    <i class="fas fa-chart-line"></i>
+                                    <span>Analytics</span>
+                                </div>
+                                <div class="dash-nav-item">
+                                    <i class="fas fa-cog"></i>
+                                    <span>Settings</span>
+                                </div>
+                            </div>
+                            <div class="dash-main">
+                                <div class="dash-header">
+                                    <h3>Candidate Pipeline</h3>
+                                    <div class="search-box">
+                                        <i class="fas fa-search"></i>
+                                        <input type="text" placeholder="Search developers...">
+                                    </div>
+                                </div>
+                                <div class="dash-candidates">
+                                    <div class="candidate-row">
+                                        <div class="cand-avatar">
+                                            <i class="fab fa-github"></i>
+                                        </div>
+                                        <div class="cand-info">
+                                            <h4>Alex Chen</h4>
+                                            <p>Full Stack • React, Node.js</p>
+                                        </div>
+                                        <div class="cand-score">
+                                            <span>94</span>
+                                        </div>
+                                        <div class="cand-status available">Available</div>
+                                    </div>
+                                    <div class="candidate-row">
+                                        <div class="cand-avatar">
+                                            <i class="fab fa-github"></i>
+                                        </div>
+                                        <div class="cand-info">
+                                            <h4>Sarah Martinez</h4>
+                                            <p>Senior Engineer • Python, Go</p>
+                                        </div>
+                                        <div class="cand-score">
+                                            <span>96</span>
+                                        </div>
+                                        <div class="cand-status open">Open to Work</div>
+                                    </div>
+                                    <div class="candidate-row">
+                                        <div class="cand-avatar">
+                                            <i class="fab fa-github"></i>
+                                        </div>
+                                        <div class="cand-info">
+                                            <h4>Marcus Johnson</h4>
+                                            <p>Architect • Systems Design</p>
+                                        </div>
+                                        <div class="cand-score">
+                                            <span>98</span>
+                                        </div>
+                                        <div class="cand-status busy">In Interviews</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials-section" id="testimonials">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Testimonials</span>
+                <h2>Loved by <span class="gradient-text">Teams & Developers</span></h2>
+            </div>
+            
+            <div class="testimonials-slider">
+                <div class="testimonial-track">
+                    <div class="testimonial-card">
+                        <div class="quote-icon">
+                            <i class="fas fa-quote-left"></i>
+                        </div>
+                        <p>"DHH transformed how we hire. We found our best engineer through their GitHub profile, not their resume."</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="author-info">
+                                <h4>Jennifer Walsh</h4>
+                                <p>CTO at TechStart</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="testimonial-card">
+                        <div class="quote-icon">
+                            <i class="fas fa-quote-left"></i>
+                        </div>
+                        <p>"Finally, a platform that values my actual code over fancy credentials. Got hired based on my open source work!"</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="author-info">
+                                <h4>Miguel Rodriguez</h4>
+                                <p>Software Engineer</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="testimonial-card">
+                        <div class="quote-icon">
+                            <i class="fas fa-quote-left"></i>
+                        </div>
+                        <p>"The AI matching is incredible. Every candidate DHH sent us was perfectly aligned with our tech stack."</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="author-info">
+                                <h4>David Park</h4>
+                                <p>Head of Engineering at ScaleUp</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="testimonial-card">
+                        <div class="quote-icon">
+                            <i class="fas fa-quote-left"></i>
+                        </div>
+                        <p>"As a self-taught developer, DHH gave me the visibility I never had. My commit history speaks for itself."</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="author-info">
+                                <h4>Aisha Patel</h4>
+                                <p>Frontend Developer</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="slider-controls">
+                    <button class="slider-btn prev">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="slider-btn next">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="cta">
+        <div class="container">
+            <div class="cta-content">
+                <div class="cta-glow"></div>
+                <h2>Join The Future Of <span class="gradient-text">Developer Hiring</span></h2>
+                <p>Whether you're a developer looking for opportunities or a company seeking top talent, DHH is your gateway to better hiring.</p>
+                
+                <div class="cta-buttons">
+                    <button class="btn btn-primary btn-xlarge" id="ctaEarlyAccess">
+                        <i class="fas fa-rocket"></i>
+                        Get Early Access
+                    </button>
+                    <button class="btn btn-outline btn-xlarge" id="joinWaitlist">
+                        <i class="fas fa-envelope"></i>
+                        Join Waitlist
+                    </button>
+                </div>
+                
+                <div class="cta-trust">
+                    <span>Trusted by teams at</span>
+                    <div class="trust-logos">
+                        <span><i class="fab fa-google"></i></span>
+                        <span><i class="fab fa-microsoft"></i></span>
+                        <span><i class="fab fa-amazon"></i></span>
+                        <span><i class="fab fa-meta"></i></span>
+                        <span><i class="fab fa-apple"></i></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="#" class="logo">
+                        <span class="logo-icon"><i class="fas fa-code"></i></span>
+                        <span class="logo-text">DHH</span>
+                    </a>
+                    <p>Developers Hiring Hub - Where real code meets real opportunities.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-github"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-discord"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-links">
+                    <h4>Product</h4>
+                    <ul>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#developers">For Developers</a></li>
+                        <li><a href="#recruiters">For Recruiters</a></li>
+                        <li><a href="#">Pricing</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-links">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-links">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">API Reference</a></li>
+                        <li><a href="#">Status</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-links">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Cookie Policy</a></li>
+                        <li><a href="#">GDPR</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 DHH — Developers Hiring Hub. All rights reserved.</p>
+                <p class="studio-credit">Powered by <span class="gradient-text">Quick Red Tech Software Development Studio</span></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Auth Modal -->
+    <div class="auth-modal" id="authModal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">
+                <i class="fas fa-times"></i>
+            </button>
+            
+            <div class="auth-header">
+                <div class="logo">
+                    <span class="logo-icon"><i class="fas fa-code"></i></span>
+                    <span class="logo-text">DHH</span>
+                </div>
+                <h2>Welcome Back</h2>
+                <p>Sign in to access your developer dashboard</p>
+            </div>
+            
+            <div class="auth-providers">
+                <button class="auth-btn google" id="googleAuth">
+                    <i class="fab fa-google"></i>
+                    Continue with Google
+                </button>
+                <button class="auth-btn github" id="githubAuth">
+                    <i class="fab fa-github"></i>
+                    Continue with GitHub
+                </button>
+            </div>
+            
+            <div class="auth-divider">
+                <span>or</span>
+            </div>
+            
+            <form class="auth-form" id="authForm">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="you@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">
+                    Sign In with Email
+                </button>
+            </form>
+            
+            <div class="auth-footer">
+                <p>Don't have an account? <a href="#" id="switchToSignup">Sign up</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="scripts/main.js"></script>
+</body>
+</html>
