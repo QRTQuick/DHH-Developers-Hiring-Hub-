@@ -1,8 +1,0 @@
-[project]
-name = "dhh-developers-hiring-hub"
-version = "1.0.0"
-description = "Developers Hiring Hub by Quick Red Tech"
-requires-python = ">=3.9"
-
-[tool.vercel]
-entrypoint = "backend.run:app"
