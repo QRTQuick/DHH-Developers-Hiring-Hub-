@@ -21,10 +21,10 @@ def create_app(config_class=Config):
     # Determine the base directory for Vercel vs local
     if os.environ.get('VERCEL'):
         # On Vercel, frontend is relative to this file's parent (app/)
-        base_dir = os.path.join(os.path.dirname(__file__), '..', 'frontend')
+        base_dir = os.path.join(os.path.dirname(__file__), 'frontend')
     else:
         # Local development
-        base_dir = os.path.join(os.path.dirname(__file__), '..', 'frontend')
+        base_dir = os.path.join(os.path.dirname(__file__), 'frontend')
     
     app = Flask(__name__, 
                 static_folder=os.path.join(base_dir, 'static'), 
