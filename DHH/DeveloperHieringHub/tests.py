@@ -1,7 +1,9 @@
-from django.test import TestCase
+from unittest.mock import patch
+
+from django.test import TestCase, override_settings
 from django.urls import reverse
 
-from .models import BetaJoiner
+from .models import BetaJoiner, EmailOTP, PlatformUser
 
 
 class PublicPageTests(TestCase):
@@ -15,6 +17,11 @@ class PublicPageTests(TestCase):
             'dashboard',
             'jobs',
             'github-activity',
+            'about',
+            'how-it-works',
+            'security',
+            'shortlist',
+            'login',
             'developer-signup',
             'hirer-signup',
         ]
@@ -39,3 +46,24 @@ class PublicPageTests(TestCase):
 
         self.assertRedirects(response, reverse('join-beta'))
         self.assertEqual(BetaJoiner.objects.count(), 1)
+
+    def test_profile_and_settings_require_login(self):
+        for name in ['profile', 'settings']:
+            with self.subTest(name=name):
+                response = self.client.get(reverse(name))
+                self.assertRedirects(response, reverse('login'))
+
+    @override_settings(RESEND_API_KEY='test-key')
+    @patch('DeveloperHieringHub.views.send_otp_email')
+    def test_email_login_creates_otp(self, send_otp_email):
+        PlatformUser.objects.create(
+            full_name='Grace Hopper',
+            email='grace@example.com',
+            role=PlatformUser.ROLE_DEVELOPER,
+        )
+
+        response = self.client.post(reverse('login'), {'email': 'grace@example.com'})
+
+        self.assertRedirects(response, reverse('verify-code'))
+        self.assertEqual(EmailOTP.objects.count(), 1)
+        send_otp_email.assert_called_once()

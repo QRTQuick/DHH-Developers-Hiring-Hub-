@@ -376,6 +376,32 @@ nav a:hover::after {
     box-shadow: 0 0 50px rgba(0, 128, 128, 0.2);
 }
 
+.disabled-plan {
+    opacity: 0.68;
+    filter: grayscale(0.35);
+}
+
+.disabled-plan:hover {
+    transform: none;
+    border-color: rgba(255, 255, 255, 0.08);
+    box-shadow: none;
+}
+
+.plan-status {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 34px;
+    margin-bottom: 22px;
+    padding: 7px 13px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+    color: #cfcfcf;
+    font-size: 0.86rem;
+    font-weight: 800;
+    position: relative;
+}
+
 .badge {
     position: absolute;
     top: 20px;
@@ -436,6 +462,18 @@ button {
 button:hover {
     transform: scale(1.03);
     box-shadow: 0 0 25px rgba(0, 128, 128, 0.35);
+}
+
+button:disabled {
+    cursor: not-allowed;
+    background: #262626;
+    color: #8f8f8f;
+    box-shadow: none;
+}
+
+button:disabled:hover {
+    transform: none;
+    box-shadow: none;
 }
 
 /* ANIMATIONS */

@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - DHH</title>
+    <link rel="stylesheet" href="{% static 'DeveloperHieringHub/join-beta.css' %}">
+    <link rel="stylesheet" href="{% static 'DeveloperHieringHub/hub.css' %}">
+</head>
+
+<body>
+    <section class="hub-section">
+        <p class="hub-eyebrow">Email 2FA</p>
+        <h1 class="hub-title">Sign in with a code</h1>
+        <p class="hub-copy">Enter the email attached to your DHH profile. We will send a short-lived 6-digit verification code.</p>
+
+        {% if messages %}
+            <ul class="messages" style="margin: 0 0 20px; width: 100%;">
+                {% for message in messages %}<li>{{ message }}</li>{% endfor %}
+            </ul>
+        {% endif %}
+
+        <div class="form-panel">
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Send Code</button>
+            </form>
+        </div>
+        <div class="inline-actions">
+            <a class="ghost-link" href="{% url 'developer-signup' %}">Create Developer Profile</a>
+            <a class="ghost-link" href="{% url 'hirer-signup' %}">Create Hirer Profile</a>
+        </div>
+    </section>
+</body>
+
+</html>

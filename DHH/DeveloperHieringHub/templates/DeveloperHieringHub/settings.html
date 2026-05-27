@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - DHH</title>
+    <link rel="stylesheet" href="{% static 'DeveloperHieringHub/join-beta.css' %}">
+    <link rel="stylesheet" href="{% static 'DeveloperHieringHub/hub.css' %}">
+</head>
+
+<body>
+    <section class="hub-section">
+        <p class="hub-eyebrow">Account Settings</p>
+        <h1 class="hub-title">Profile settings</h1>
+        <p class="hub-copy">Update your hiring identity, contact details, location, and GitHub username.</p>
+
+        {% if messages %}
+            <ul class="messages" style="margin: 0 0 20px; width: 100%;">
+                {% for message in messages %}<li>{{ message }}</li>{% endfor %}
+            </ul>
+        {% endif %}
+
+        <div class="form-panel">
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Save Settings</button>
+            </form>
+        </div>
+        <div class="inline-actions">
+            <a class="ghost-link" href="{% url 'profile' %}">Back to Profile</a>
+            <a class="ghost-link" href="{% url 'logout' %}">Logout</a>
+        </div>
+    </section>
+</body>
+
+</html>

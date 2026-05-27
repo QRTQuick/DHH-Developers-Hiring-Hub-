@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.contrib.auth.hashers import check_password, make_password
 from django.db import models
 from django.utils import timezone
 
@@ -277,3 +278,52 @@ class DeveloperMetricSnapshot(TimeStampedModel):
 
     def __str__(self):
         return f'{self.developer} metrics at {self.captured_at:%Y-%m-%d}'
+
+
+class EmailOTP(TimeStampedModel):
+    PURPOSE_LOGIN = 'login'
+    PURPOSE_CHOICES = [
+        (PURPOSE_LOGIN, 'Login'),
+    ]
+
+    user = models.ForeignKey(
+        PlatformUser,
+        on_delete=models.CASCADE,
+        related_name='email_otps',
+    )
+    email = models.EmailField()
+    purpose = models.CharField(max_length=20, choices=PURPOSE_CHOICES, default=PURPOSE_LOGIN)
+    code_hash = models.CharField(max_length=255)
+    expires_at = models.DateTimeField()
+    used_at = models.DateTimeField(null=True, blank=True)
+    attempts = models.PositiveSmallIntegerField(default=0)
+    request_ip = models.GenericIPAddressField(null=True, blank=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['email', 'purpose', 'used_at']),
+            models.Index(fields=['expires_at']),
+        ]
+
+    @property
+    def is_expired(self):
+        return timezone.now() >= self.expires_at
+
+    @property
+    def is_usable(self):
+        return self.used_at is None and not self.is_expired and self.attempts < 5
+
+    def set_code(self, code):
+        self.code_hash = make_password(code)
+
+    def verify(self, code):
+        is_valid = self.is_usable and check_password(code, self.code_hash)
+        self.attempts += 1
+        if is_valid:
+            self.used_at = timezone.now()
+        self.save(update_fields=['attempts', 'used_at', 'updated_at'])
+        return is_valid
+
+    def __str__(self):
+        return f'{self.email} {self.get_purpose_display()} OTP'

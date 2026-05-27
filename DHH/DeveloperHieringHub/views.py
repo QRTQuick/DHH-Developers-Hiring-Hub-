@@ -1,17 +1,28 @@
+import secrets
+from datetime import timedelta
+from functools import wraps
+
+from django.conf import settings
 from django.contrib import messages
 from django.db.models import Sum
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils import timezone
 
 from .forms import (
     BetaJoinerForm,
     DeveloperSignupForm,
+    EmailLoginForm,
     GitHubConnectionForm,
     HirerSignupForm,
     JobPostForm,
+    OTPVerificationForm,
+    ProfileSettingsForm,
 )
+from .email_service import send_otp_email
 from .models import (
     BetaJoiner,
     DeveloperProfile,
+    EmailOTP,
     GitHubAuth,
     GitHubCommit,
     GitHubRepository,
@@ -19,6 +30,33 @@ from .models import (
     JobPost,
     PlatformUser,
 )
+
+
+def get_client_ip(request):
+    forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if forwarded_for:
+        return forwarded_for.split(',')[0].strip()
+    return request.META.get('REMOTE_ADDR')
+
+
+def current_platform_user(request):
+    user_id = request.session.get('platform_user_id')
+    if not user_id:
+        return None
+    return PlatformUser.objects.filter(pk=user_id).first()
+
+
+def platform_login_required(view_func):
+    @wraps(view_func)
+    def wrapped(request, *args, **kwargs):
+        user = current_platform_user(request)
+        if not user:
+            messages.info(request, 'Sign in with your email code to continue.')
+            return redirect('login')
+        request.platform_user = user
+        return view_func(request, *args, **kwargs)
+
+    return wrapped
 
 
 def site_stats():
@@ -61,6 +99,26 @@ def companies(request):
 
 def pricing(request):
     return render(request, 'DeveloperHieringHub/pricing.html', {'stats': site_stats()})
+
+
+def about(request):
+    return render(request, 'DeveloperHieringHub/about.html', {'stats': site_stats()})
+
+
+def how_it_works(request):
+    return render(request, 'DeveloperHieringHub/how-it-works.html', {'stats': site_stats()})
+
+
+def security(request):
+    return render(request, 'DeveloperHieringHub/security.html', {'user': current_platform_user(request)})
+
+
+def shortlist(request):
+    context = {
+        'developers': DeveloperProfile.objects.select_related('user').prefetch_related('skills')[:8],
+        'stats': site_stats(),
+    }
+    return render(request, 'DeveloperHieringHub/shortlist.html', context)
 
 
 def join_beta(request):
@@ -188,3 +246,89 @@ def github_activity(request):
         'stats': site_stats(),
     }
     return render(request, 'DeveloperHieringHub/github.html', context)
+
+
+def login(request):
+    form = EmailLoginForm(request.POST or None)
+    if request.method == 'POST' and form.is_valid():
+        email = form.cleaned_data['email']
+        user = PlatformUser.objects.filter(email=email).first()
+        if not user:
+            messages.error(request, 'No DHH profile exists for that email yet. Create a developer or hirer profile first.')
+            return redirect('login')
+
+        code = f'{secrets.randbelow(1000000):06d}'
+        otp = EmailOTP(
+            user=user,
+            email=email,
+            expires_at=timezone.now() + timedelta(minutes=settings.EMAIL_OTP_EXPIRY_MINUTES),
+            request_ip=get_client_ip(request),
+        )
+        otp.set_code(code)
+        otp.save()
+
+        try:
+            send_otp_email(email, code)
+        except Exception as exc:
+            otp.delete()
+            messages.error(request, f'Could not send the email code yet: {exc}')
+            return redirect('login')
+
+        request.session['pending_otp_id'] = otp.pk
+        messages.success(request, 'We sent a 6-digit sign-in code to your email.')
+        return redirect('verify-code')
+
+    return render(request, 'DeveloperHieringHub/login.html', {'form': form})
+
+
+def verify_code(request):
+    otp_id = request.session.get('pending_otp_id')
+    otp = EmailOTP.objects.select_related('user').filter(pk=otp_id).first() if otp_id else None
+    if not otp:
+        messages.info(request, 'Request a new sign-in code.')
+        return redirect('login')
+
+    form = OTPVerificationForm(request.POST or None)
+    if request.method == 'POST' and form.is_valid():
+        if otp.verify(form.cleaned_data['code']):
+            request.session['platform_user_id'] = otp.user_id
+            request.session.pop('pending_otp_id', None)
+            otp.user.is_verified = True
+            otp.user.save(update_fields=['is_verified', 'updated_at'])
+            messages.success(request, 'You are signed in.')
+            return redirect('profile')
+
+        messages.error(request, 'That code is invalid, expired, or has too many attempts.')
+
+    return render(request, 'DeveloperHieringHub/verify-code.html', {'form': form, 'otp': otp})
+
+
+def logout(request):
+    request.session.pop('platform_user_id', None)
+    request.session.pop('pending_otp_id', None)
+    messages.success(request, 'You are signed out.')
+    return redirect('index')
+
+
+@platform_login_required
+def profile(request):
+    user = request.platform_user
+    context = {
+        'user': user,
+        'developer_profile': getattr(user, 'developer_profile', None),
+        'hirer_profile': getattr(user, 'hirer_profile', None),
+        'github_auth': getattr(user, 'github_auth', None),
+    }
+    return render(request, 'DeveloperHieringHub/profile.html', context)
+
+
+@platform_login_required
+def settings_page(request):
+    user = request.platform_user
+    form = ProfileSettingsForm(request.POST or None, instance=user)
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        messages.success(request, 'Your settings were saved.')
+        return redirect('settings')
+
+    return render(request, 'DeveloperHieringHub/settings.html', {'form': form, 'user': user})

@@ -41,6 +41,7 @@
     <section class="pricing">
 
         <h1>DHH Pricing</h1>
+        <p class="pricing-sub">DHH is currently in beta. The Free plan is open now; paid plans are not yet available.</p>
 
         <div class="pricing-grid">
 
@@ -57,29 +58,31 @@
 
             </div>
 
-            <div class="card featured">
+            <div class="card disabled-plan">
 
                 <i class="fas fa-rocket icon"></i>
                 <h2>Starter</h2>
 
-                <h3>$10/mo</h3>
+                <h3>Not yet available</h3>
 
                 <p>Advanced filters and saved searches for teams.</p>
+                <span class="plan-status">Coming after beta</span>
 
-                <button onclick="window.location.href='{% url 'join-beta' %}'">Choose Plan</button>
+                <button type="button" disabled>Unavailable</button>
 
             </div>
 
-            <div class="card">
+            <div class="card disabled-plan">
 
                 <i class="fas fa-crown icon"></i>
                 <h2>Pro</h2>
 
-                <h3>$22/mo</h3>
+                <h3>Not yet available</h3>
 
                 <p>Premium analytics and collaboration tools.</p>
+                <span class="plan-status">Coming after beta</span>
 
-                <button onclick="window.location.href='{% url 'join-beta' %}'">Upgrade Now</button>
+                <button type="button" disabled>Unavailable</button>
 
             </div>
 

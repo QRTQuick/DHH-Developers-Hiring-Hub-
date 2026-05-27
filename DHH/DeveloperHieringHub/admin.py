@@ -5,6 +5,7 @@ from .models import (
     DeveloperMetricSnapshot,
     DeveloperProfile,
     DeveloperSkill,
+    EmailOTP,
     GitHubAuth,
     GitHubCommit,
     GitHubRepository,
@@ -84,3 +85,11 @@ class GitHubCommitAdmin(admin.ModelAdmin):
 
 admin.site.register(Skill)
 admin.site.register(DeveloperMetricSnapshot)
+
+
+@admin.register(EmailOTP)
+class EmailOTPAdmin(admin.ModelAdmin):
+    list_display = ('email', 'user', 'purpose', 'attempts', 'expires_at', 'used_at', 'created_at')
+    list_filter = ('purpose', 'used_at', 'expires_at')
+    search_fields = ('email', 'user__full_name', 'user__email')
+    readonly_fields = ('code_hash',)

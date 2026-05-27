@@ -1,0 +1,23 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "builds": [
+    {
+      "src": "DHH/wsgi.py",
+      "use": "@vercel/python"
+    },
+    {
+      "src": "DeveloperHieringHub/static/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/static/(.*)",
+      "dest": "DeveloperHieringHub/static/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "DHH/wsgi.py"
+    }
+  ]
+}

@@ -73,3 +73,29 @@ class GitHubConnectionForm(forms.Form):
 
     def clean_email(self):
         return self.cleaned_data['email'].lower()
+
+
+class EmailLoginForm(forms.Form):
+    email = forms.EmailField(
+        widget=forms.EmailInput(attrs={'placeholder': 'Email address'}),
+    )
+
+    def clean_email(self):
+        return self.cleaned_data['email'].lower()
+
+
+class OTPVerificationForm(forms.Form):
+    code = forms.CharField(
+        min_length=6,
+        max_length=6,
+        widget=forms.TextInput(attrs={'placeholder': '6-digit code', 'inputmode': 'numeric'}),
+    )
+
+
+class ProfileSettingsForm(forms.ModelForm):
+    class Meta:
+        model = PlatformUser
+        fields = ['full_name', 'role', 'location', 'bio', 'phone', 'avatar_url', 'github_username']
+        widgets = {
+            'bio': forms.Textarea(attrs={'rows': 4}),
+        }

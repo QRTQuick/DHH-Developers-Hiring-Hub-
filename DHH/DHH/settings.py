@@ -21,6 +21,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / '.env')
 
 
+def env_bool(name, default=False):
+    value = os.getenv(name)
+    if value is None:
+        return default
+    return value.lower() in {'1', 'true', 'yes', 'on'}
+
+
+def env_list(name, default=''):
+    return [item.strip() for item in os.getenv(name, default).split(',') if item.strip()]
+
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
@@ -31,9 +42,19 @@ SECRET_KEY = os.getenv(
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG', 'True') == 'True'
+DEBUG = env_bool('DEBUG', default=not env_bool('VERCEL'))
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
+ALLOWED_HOSTS = env_list('ALLOWED_HOSTS', '')
+for host in ['127.0.0.1', 'localhost', '.vercel.app']:
+    if host not in ALLOWED_HOSTS:
+        ALLOWED_HOSTS.append(host)
+if os.getenv('VERCEL_URL'):
+    ALLOWED_HOSTS.append(os.getenv('VERCEL_URL'))
+
+CSRF_TRUSTED_ORIGINS = env_list('CSRF_TRUSTED_ORIGINS')
+if os.getenv('VERCEL_URL'):
+    CSRF_TRUSTED_ORIGINS.append(f"https://{os.getenv('VERCEL_URL')}")
+CSRF_TRUSTED_ORIGINS.extend(['https://*.vercel.app'])
 
 
 # Application definition
@@ -91,6 +112,9 @@ DATABASES = {
 
 GITHUB_CLIENT_ID = os.getenv('GITHUB_CLIENT_ID', '')
 GITHUB_CLIENT_SECRET = os.getenv('GITHUB_CLIENT_SECRET', '')
+RESEND_API_KEY = os.getenv('RESEND_API_KEY', '')
+RESEND_FROM_EMAIL = os.getenv('RESEND_FROM_EMAIL', 'DHH <onboarding@resend.dev>')
+EMAIL_OTP_EXPIRY_MINUTES = int(os.getenv('EMAIL_OTP_EXPIRY_MINUTES', '10'))
 
 
 # Password validation
@@ -127,7 +151,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
