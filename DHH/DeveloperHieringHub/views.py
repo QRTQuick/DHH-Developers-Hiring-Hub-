@@ -71,6 +71,11 @@ def site_stats():
     }
 
 
+def loading(request):
+    """Loading page that redirects to dashboard if authenticated, otherwise to landing page."""
+    return render(request, 'DeveloperHieringHub/loading.html')
+
+
 def index(request):
     context = {
         'stats': site_stats(),
@@ -126,18 +131,21 @@ def join_beta(request):
     if request.method == 'POST' and form.is_valid():
         form.save()
         messages.success(request, 'You joined the DHH beta list. We will contact you soon.')
-        return redirect('join-beta')
+        return redirect('dashboard')
 
     return render(request, 'DeveloperHieringHub/join-beta.html', {'form': form})
 
 
+@platform_login_required
 def dashboard(request):
+    user = request.platform_user
     context = {
         'stats': site_stats(),
         'latest_joiners': BetaJoiner.objects.all()[:8],
         'latest_developers': DeveloperProfile.objects.select_related('user')[:6],
         'latest_jobs': JobPost.objects.filter(is_active=True)[:6],
         'latest_commits': GitHubCommit.objects.select_related('developer__user', 'repository')[:8],
+        'user': user,
     }
     return render(request, 'DeveloperHieringHub/dashboard.html', context)
 
@@ -296,7 +304,7 @@ def verify_code(request):
             otp.user.is_verified = True
             otp.user.save(update_fields=['is_verified', 'updated_at'])
             messages.success(request, 'You are signed in.')
-            return redirect('profile')
+            return redirect('dashboard')
 
         messages.error(request, 'That code is invalid, expired, or has too many attempts.')
 
