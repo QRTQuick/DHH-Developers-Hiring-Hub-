@@ -5,35 +5,501 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - DHH</title>
-    <link rel="stylesheet" href="{% static 'DeveloperHieringHub/join-beta.css' %}">
-    <link rel="stylesheet" href="{% static 'DeveloperHieringHub/hub.css' %}">
+    <title>Login - DHH | Developers Hiring Hub</title>
+    
+    <link rel="stylesheet" href="{% static 'DeveloperHieringHub/design-system.css' %}">
+    <link rel="stylesheet" href="{% static 'DeveloperHieringHub/navigation.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* LOGIN PAGE SPECIFIC STYLES */
+        .login-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-4xl) var(--space-lg);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .login-page::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, var(--teal-bg) 0%, transparent 70%);
+            opacity: 0.5;
+            animation: float 10s ease-in-out infinite;
+        }
+        
+        .login-page::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -10%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(0, 128, 128, 0.15) 0%, transparent 70%);
+            opacity: 0.4;
+            animation: float 12s ease-in-out infinite reverse;
+        }
+        
+        .login-container {
+            width: 100%;
+            max-width: 480px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .login-card {
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: var(--radius-xl);
+            padding: var(--space-3xl);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .login-header {
+            text-align: center;
+            margin-bottom: var(--space-2xl);
+        }
+        
+        .login-logo {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: var(--space-lg);
+        }
+        
+        .login-logo-box {
+            width: 56px;
+            height: 56px;
+            background: var(--gradient-teal);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1.8rem;
+            color: var(--color-black);
+            box-shadow: 0 0 30px var(--teal-glow);
+        }
+        
+        .login-title {
+            font-size: 2rem;
+            margin-bottom: var(--space-sm);
+            color: var(--color-white);
+        }
+        
+        .login-subtitle {
+            color: var(--color-gray-5);
+            font-size: 1rem;
+        }
+        
+        .login-form {
+            margin-bottom: var(--space-xl);
+        }
+        
+        .form-group {
+            margin-bottom: var(--space-lg);
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: var(--space-sm);
+            font-weight: 600;
+            color: var(--color-gray-6);
+            font-size: 0.9rem;
+        }
+        
+        .form-input-wrapper {
+            position: relative;
+        }
+        
+        .form-input-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--color-gray-4);
+            transition: var(--transition-base);
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 16px 16px 16px 48px;
+            background: var(--color-dark-2);
+            border: 1px solid var(--color-gray-2);
+            border-radius: var(--radius-md);
+            color: var(--color-white);
+            font-family: var(--font-family);
+            font-size: 1rem;
+            transition: var(--transition-base);
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--teal-primary);
+            box-shadow: 0 0 0 3px var(--teal-bg);
+        }
+        
+        .form-input:focus + .form-input-icon {
+            color: var(--teal-light);
+        }
+        
+        .form-input::placeholder {
+            color: var(--color-gray-4);
+        }
+        
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-lg);
+            font-size: 0.9rem;
+        }
+        
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--color-gray-5);
+        }
+        
+        .remember-me input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--teal-primary);
+            cursor: pointer;
+        }
+        
+        .forgot-password {
+            color: var(--teal-light);
+            font-weight: 500;
+            transition: var(--transition-base);
+        }
+        
+        .forgot-password:hover {
+            color: var(--teal-bright);
+            text-decoration: underline;
+        }
+        
+        .btn-login {
+            width: 100%;
+            padding: 16px;
+            font-size: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .login-divider {
+            display: flex;
+            align-items: center;
+            gap: var(--space-lg);
+            margin: var(--space-xl) 0;
+            color: var(--color-gray-4);
+            font-size: 0.9rem;
+        }
+        
+        .login-divider::before,
+        .login-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .login-social {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-md);
+            margin-bottom: var(--space-xl);
+        }
+        
+        .btn-social {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            color: var(--color-white);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-base);
+        }
+        
+        .btn-social:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--teal-border);
+            color: var(--teal-light);
+        }
+        
+        .login-footer {
+            text-align: center;
+            color: var(--color-gray-5);
+            font-size: 0.95rem;
+        }
+        
+        .login-footer a {
+            color: var(--teal-light);
+            font-weight: 600;
+        }
+        
+        .login-footer a:hover {
+            text-decoration: underline;
+        }
+        
+        .messages {
+            margin-bottom: var(--space-lg);
+            padding: var(--space-md);
+            border-radius: var(--radius-md);
+            background: rgba(255, 100, 100, 0.1);
+            border: 1px solid rgba(255, 100, 100, 0.3);
+            color: #ff6464;
+            font-size: 0.9rem;
+        }
+        
+        .messages.success {
+            background: rgba(0, 255, 128, 0.1);
+            border: 1px solid rgba(0, 255, 128, 0.3);
+            color: #00ff80;
+        }
+        
+        /* ANIMATIONS */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .login-card {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+        
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .login-page {
+                padding: var(--space-2xl) var(--space-md);
+            }
+            
+            .login-card {
+                padding: var(--space-2xl);
+            }
+            
+            .login-title {
+                font-size: 1.5rem;
+            }
+            
+            .login-social {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 
 <body>
-    <section class="hub-section">
-        <p class="hub-eyebrow">Email 2FA</p>
-        <h1 class="hub-title">Sign in with a code</h1>
-        <p class="hub-copy">Enter the email attached to your DHH profile. We will send a short-lived 6-digit verification code.</p>
-
-        {% if messages %}
-            <ul class="messages" style="margin: 0 0 20px; width: 100%;">
-                {% for message in messages %}<li>{{ message }}</li>{% endfor %}
-            </ul>
-        {% endif %}
-
-        <div class="form-panel">
-            <form method="post">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit">Send Code</button>
-            </form>
+    <!-- NAVBAR -->
+    <header class="navbar">
+        <div class="navbar-logo" onclick="window.location.href='{% url 'index' %}'">
+            <div class="logo-box">D</div>
+            <h2 class="logo-text">DHH</h2>
         </div>
-        <div class="inline-actions">
-            <a class="ghost-link" href="{% url 'developer-signup' %}">Create Developer Profile</a>
-            <a class="ghost-link" href="{% url 'hirer-signup' %}">Create Hirer Profile</a>
+        
+        <nav class="navbar-nav">
+            <a href="{% url 'index' %}" class="nav-link">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+            <a href="{% url 'pricing' %}" class="nav-link">
+                <i class="fas fa-tag"></i>
+                <span>Pricing</span>
+            </a>
+        </nav>
+        
+        <div class="navbar-actions">
+            <button class="btn btn-secondary btn-sm" onclick="window.location.href='{% url 'login' %}'">
+                Login
+            </button>
+            <button class="btn btn-primary btn-sm" onclick="window.location.href='{% url 'developer-signup' %}'">
+                Sign Up
+            </button>
         </div>
-    </section>
+        
+        <button class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </header>
+    
+    <!-- MOBILE MENU -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="{% url 'index' %}"><i class="fas fa-home"></i> Home</a>
+        <a href="{% url 'pricing' %}"><i class="fas fa-tag"></i> Pricing</a>
+        <a href="{% url 'login' %}"><i class="fas fa-sign-in-alt"></i> Login</a>
+        <a href="{% url 'developer-signup' %}"><i class="fas fa-user-plus"></i> Sign Up</a>
+    </div>
+
+    <!-- LOGIN PAGE -->
+    <main class="login-page">
+        <div class="login-container">
+            <div class="login-card">
+                <!-- HEADER -->
+                <div class="login-header">
+                    <div class="login-logo">
+                        <div class="login-logo-box">D</div>
+                    </div>
+                    <h1 class="login-title">Welcome back</h1>
+                    <p class="login-subtitle">Sign in to your DHH account to continue</p>
+                </div>
+                
+                <!-- MESSAGES -->
+                {% if messages %}
+                    <div class="messages">
+                        {% for message in messages %}
+                            <p style="margin: 0;">{{ message }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                
+                <!-- LOGIN FORM -->
+                <form method="post" class="login-form">
+                    {% csrf_token %}
+                    
+                    <!-- Email Field -->
+                    <div class="form-group">
+                        <label class="form-label" for="id_email">Email Address</label>
+                        <div class="form-input-wrapper">
+                            <input 
+                                type="email" 
+                                name="email" 
+                                id="id_email" 
+                                class="form-input" 
+                                placeholder="you@example.com"
+                                required
+                                autocomplete="email"
+                            >
+                            <i class="fas fa-envelope form-input-icon"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Password Field -->
+                    <div class="form-group">
+                        <label class="form-label" for="id_password">Password</label>
+                        <div class="form-input-wrapper">
+                            <input 
+                                type="password" 
+                                name="password" 
+                                id="id_password" 
+                                class="form-input" 
+                                placeholder="Enter your password"
+                                required
+                                autocomplete="current-password"
+                            >
+                            <i class="fas fa-lock form-input-icon"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Remember Me & Forgot Password -->
+                    <div class="form-options">
+                        <label class="remember-me">
+                            <input type="checkbox" name="remember">
+                            <span>Remember me</span>
+                        </label>
+                        <a href="#" class="forgot-password">Forgot password?</a>
+                    </div>
+                    
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-primary btn-login">
+                        Sign In
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </form>
+                
+                <!-- DIVIDER -->
+                <div class="login-divider">
+                    <span>or continue with</span>
+                </div>
+                
+                <!-- SOCIAL LOGIN -->
+                <div class="login-social">
+                    <button class="btn-social">
+                        <i class="fab fa-github"></i>
+                        <span>GitHub</span>
+                    </button>
+                    <button class="btn-social">
+                        <i class="fab fa-google"></i>
+                        <span>Google</span>
+                    </button>
+                </div>
+                
+                <!-- FOOTER -->
+                <div class="login-footer">
+                    <p>Don't have an account? <a href="{% url 'developer-signup' %}">Create one</a></p>
+                    <p style="margin-top: 8px;">
+                        Join as a company? <a href="{% url 'hirer-signup' %}">Sign up here</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Mobile Menu Toggle
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobileMenu');
+        
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+        });
+        
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!hamburger.contains(e.target) && !mobileMenu.contains(e.target)) {
+                hamburger.classList.remove('active');
+                mobileMenu.classList.remove('active');
+            }
+        });
+        
+        // Form validation visual feedback
+        const inputs = document.querySelectorAll('.form-input');
+        inputs.forEach(input => {
+            input.addEventListener('focus', () => {
+                input.parentElement.classList.add('focused');
+            });
+            
+            input.addEventListener('blur', () => {
+                if (!input.value) {
+                    input.parentElement.classList.remove('focused');
+                }
+            });
+        });
+        
+        // Auto-hide success messages after 5 seconds
+        const messages = document.querySelector('.messages.success');
+        if (messages) {
+            setTimeout(() => {
+                messages.style.opacity = '0';
+                messages.style.transition = 'opacity 0.3s ease';
+                setTimeout(() => messages.remove(), 300);
+            }, 5000);
+        }
+    </script>
 </body>
 
 </html>
