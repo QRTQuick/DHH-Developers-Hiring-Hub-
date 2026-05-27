@@ -4,6 +4,8 @@ from functools import wraps
 
 from django.conf import settings
 from django.contrib import messages
+from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
+from django.contrib.auth.models import User
 from django.db.models import Sum
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
@@ -182,26 +184,41 @@ def developer_detail(request, pk):
 def developer_signup(request):
     form = DeveloperSignupForm(request.POST or None)
     if request.method == 'POST' and form.is_valid():
-        user = PlatformUser.objects.create(
+        email = form.cleaned_data['email']
+        password = form.cleaned_data.get('password', secrets.token_urlsafe(12))
+        
+        # Create Django auth user with hashed password
+        auth_user = User.objects.create_user(
+            username=email,
+            email=email,
+            password=password,
+        )
+        
+        # Create PlatformUser profile linked to auth user
+        platform_user = PlatformUser.objects.create(
+            auth_user=auth_user,
             full_name=form.cleaned_data['full_name'],
-            email=form.cleaned_data['email'],
+            email=email,
             role=PlatformUser.ROLE_DEVELOPER,
             github_username=form.cleaned_data['github_username'],
             bio=form.cleaned_data['bio'],
         )
+        
+        # Create DeveloperProfile
         DeveloperProfile.objects.create(
-            user=user,
+            user=platform_user,
             headline=form.cleaned_data['headline'],
             primary_stack=form.cleaned_data['primary_stack'],
             years_experience=form.cleaned_data['years_experience'],
             portfolio_url=form.cleaned_data['portfolio_url'],
         )
-        GitHubAuth.objects.create(user=user, username=form.cleaned_data['github_username'])
         
-        # Set session for authenticated user
-        request.session['platform_user_id'] = user.pk
-        user.is_verified = True
-        user.save(update_fields=['is_verified', 'updated_at'])
+        # Create GitHubAuth connection
+        GitHubAuth.objects.create(user=platform_user, username=form.cleaned_data['github_username'])
+        
+        # Login user using Django's session system
+        auth_login(request, auth_user)
+        request.session['platform_user_id'] = platform_user.pk
         
         messages.success(request, 'Developer profile created. Welcome to DHH!')
         return redirect('dashboard')
@@ -212,23 +229,36 @@ def developer_signup(request):
 def hirer_signup(request):
     form = HirerSignupForm(request.POST or None)
     if request.method == 'POST' and form.is_valid():
-        user = PlatformUser.objects.create(
+        email = form.cleaned_data['email']
+        password = form.cleaned_data.get('password', secrets.token_urlsafe(12))
+        
+        # Create Django auth user with hashed password
+        auth_user = User.objects.create_user(
+            username=email,
+            email=email,
+            password=password,
+        )
+        
+        # Create PlatformUser profile linked to auth user
+        platform_user = PlatformUser.objects.create(
+            auth_user=auth_user,
             full_name=form.cleaned_data['full_name'],
-            email=form.cleaned_data['email'],
+            email=email,
             role=PlatformUser.ROLE_HIRER,
         )
+        
+        # Create HirerProfile
         HirerProfile.objects.create(
-            user=user,
+            user=platform_user,
             company_name=form.cleaned_data['company_name'],
             company_website=form.cleaned_data['company_website'],
             company_size=form.cleaned_data['company_size'],
             hiring_needs=form.cleaned_data['hiring_needs'],
         )
         
-        # Set session for authenticated user
-        request.session['platform_user_id'] = user.pk
-        user.is_verified = True
-        user.save(update_fields=['is_verified', 'updated_at'])
+        # Login user using Django's session system
+        auth_login(request, auth_user)
+        request.session['platform_user_id'] = platform_user.pk
         
         messages.success(request, 'Hirer profile created. Welcome to DHH!')
         return redirect('dashboard')
@@ -275,22 +305,25 @@ def login(request):
         email = form.cleaned_data['email']
         password = form.cleaned_data['password']
         
-        user = PlatformUser.objects.filter(email=email).first()
-        if not user:
-            messages.error(request, 'No DHH profile exists for that email yet. Create a developer or hirer profile first.')
-            return redirect('login')
+        # Authenticate using Django's built-in auth system
+        user = authenticate(request, username=email, password=password)
         
-        # Simple password check (in production, use proper password hashing)
-        if not hasattr(user, 'password') or user.password != password:
+        if user is None:
             messages.error(request, 'Invalid email or password.')
             return redirect('login')
         
-        # Set session for authenticated user
-        request.session['platform_user_id'] = user.pk
-        user.is_verified = True
-        user.save(update_fields=['is_verified', 'updated_at'])
+        # Get the associated PlatformUser
+        try:
+            platform_user = user.dhh_profile
+        except PlatformUser.DoesNotExist:
+            messages.error(request, 'No DHH profile found for this account.')
+            return redirect('login')
         
-        messages.success(request, 'Welcome back to DHH!')
+        # Login user using Django's session system
+        auth_login(request, user)
+        request.session['platform_user_id'] = platform_user.pk
+        
+        messages.success(request, f'Welcome back, {platform_user.full_name}!')
         return redirect('dashboard')
 
     return render(request, 'DeveloperHieringHub/login.html', {'form': form})

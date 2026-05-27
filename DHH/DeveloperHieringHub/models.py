@@ -56,7 +56,6 @@ class PlatformUser(TimeStampedModel):
     )
     full_name = models.CharField(max_length=160)
     email = models.EmailField(unique=True)
-    password = models.CharField(max_length=128, blank=True, default='')
     role = models.CharField(max_length=20, choices=ROLE_CHOICES)
     location = models.CharField(max_length=160, blank=True)
     bio = models.TextField(blank=True)
@@ -70,6 +69,13 @@ class PlatformUser(TimeStampedModel):
 
     def __str__(self):
         return f'{self.full_name} - {self.get_role_display()}'
+
+    @property
+    def password(self):
+        """Delegate password access to auth_user"""
+        if self.auth_user:
+            return self.auth_user.password
+        return ''
 
 
 class Skill(TimeStampedModel):

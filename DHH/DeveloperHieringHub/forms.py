@@ -19,6 +19,8 @@ class BetaJoinerForm(forms.ModelForm):
 class DeveloperSignupForm(forms.Form):
     full_name = forms.CharField(max_length=160)
     email = forms.EmailField()
+    password = forms.CharField(widget=forms.PasswordInput, min_length=8)
+    confirm_password = forms.CharField(widget=forms.PasswordInput, min_length=8)
     github_username = forms.CharField(max_length=120)
     headline = forms.CharField(max_length=180)
     primary_stack = forms.CharField(max_length=180)
@@ -32,10 +34,19 @@ class DeveloperSignupForm(forms.Form):
             raise forms.ValidationError('A user with this email already exists.')
         return email
 
+    def clean_confirm_password(self):
+        password = self.cleaned_data.get('password')
+        confirm_password = self.cleaned_data.get('confirm_password')
+        if password and confirm_password and password != confirm_password:
+            raise forms.ValidationError('Passwords do not match.')
+        return confirm_password
+
 
 class HirerSignupForm(forms.Form):
     full_name = forms.CharField(max_length=160)
     email = forms.EmailField()
+    password = forms.CharField(widget=forms.PasswordInput, min_length=8)
+    confirm_password = forms.CharField(widget=forms.PasswordInput, min_length=8)
     company_name = forms.CharField(max_length=180)
     company_website = forms.URLField(required=False)
     company_size = forms.CharField(max_length=20, required=False)
@@ -46,6 +57,13 @@ class HirerSignupForm(forms.Form):
         if PlatformUser.objects.filter(email=email).exists():
             raise forms.ValidationError('A user with this email already exists.')
         return email
+
+    def clean_confirm_password(self):
+        password = self.cleaned_data.get('password')
+        confirm_password = self.cleaned_data.get('confirm_password')
+        if password and confirm_password and password != confirm_password:
+            raise forms.ValidationError('Passwords do not match.')
+        return confirm_password
 
 
 class JobPostForm(forms.ModelForm):
