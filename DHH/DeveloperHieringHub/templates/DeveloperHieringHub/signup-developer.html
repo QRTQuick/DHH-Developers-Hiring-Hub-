@@ -1,0 +1,30 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Developer Profile</title>
+    <link rel="stylesheet" href="{% static 'DeveloperHieringHub/join-beta.css' %}">
+    <link rel="stylesheet" href="{% static 'DeveloperHieringHub/hub.css' %}">
+</head>
+
+<body>
+    <section class="hub-section">
+        <p class="hub-eyebrow">Developers</p>
+        <h1 class="hub-title">Create developer profile</h1>
+        <div class="form-panel">
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Create Profile</button>
+            </form>
+        </div>
+        <div class="inline-actions">
+            <a class="ghost-link" href="{% url 'developers' %}">Back to Developers</a>
+        </div>
+    </section>
+</body>
+
+</html>

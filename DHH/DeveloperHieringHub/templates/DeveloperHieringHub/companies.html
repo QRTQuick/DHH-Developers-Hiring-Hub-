@@ -1,0 +1,89 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DHH Companies</title>
+
+    <link rel="stylesheet" href="{% static 'DeveloperHieringHub/companies.css' %}">
+    <link rel="stylesheet" href="{% static 'DeveloperHieringHub/hub.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <header class="navbar">
+
+        <div class="logo" onclick="window.location.href='{% url 'index' %}'">
+            <span class="logo-box">D</span>
+            <h2>DHH</h2>
+        </div>
+
+        <nav>
+            <a href="{% url 'index' %}"><i class="fas fa-home"></i> Home</a>
+            <a href="{% url 'developers' %}"><i class="fas fa-code"></i> Developers</a>
+            <a href="{% url 'companies' %}" class="active"><i class="fas fa-building"></i> Companies</a>
+            <a href="{% url 'jobs' %}"><i class="fas fa-briefcase"></i> Jobs</a>
+            <a href="{% url 'pricing' %}"><i class="fas fa-tag"></i> Pricing</a>
+        </nav>
+
+        <button class="nav-btn" onclick="window.location.href='{% url 'join-beta' %}'">
+            Join Beta
+        </button>
+
+    </header>
+
+    <section class="hero">
+
+        <h1>
+            Hire developers through
+            <span>real engineering work.</span>
+        </h1>
+
+        <p>
+            Stop filtering PDFs. Start discovering engineers
+            through code quality and contributions.
+        </p>
+
+        <button onclick="window.location.href='{% url 'hirer-signup' %}'">
+            Start Hiring
+        </button>
+
+    </section>
+
+    <section class="hub-section tight">
+        <div class="hub-grid">
+            <div class="metric-card"><h3>{{ stats.hirers }}</h3><p>Hiring teams</p></div>
+            <div class="metric-card"><h3>{{ stats.jobs }}</h3><p>Active jobs</p></div>
+            <div class="metric-card"><h3>{{ stats.developers }}</h3><p>Developer profiles</p></div>
+        </div>
+        <div class="inline-actions">
+            <a href="{% url 'hirer-signup' %}">Create Hirer Profile</a>
+            <a class="ghost-link" href="{% url 'jobs' %}">Post a Job</a>
+        </div>
+    </section>
+
+    <section class="hub-section tight">
+        <h2>Active Roles</h2>
+        <div class="hub-grid">
+            {% for job in jobs %}
+                <article class="data-card">
+                    <span class="status-pill">{{ job.get_job_type_display }}</span>
+                    <h3>{{ job.title }}</h3>
+                    <p>{{ job.company_name }}{% if job.location %} - {{ job.location }}{% endif %}</p>
+                    <p>{{ job.description|truncatewords:20 }}</p>
+                </article>
+            {% empty %}
+                <div class="empty-state">No jobs are posted yet.</div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <script src="{% static 'DeveloperHieringHub/companies.js' %}"></script>
+
+</body>
+
+</html>
