@@ -1,75 +1,624 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DHH Dashboard</title>
-    <link rel="stylesheet" href="{% static 'DeveloperHieringHub/index.css' %}">
-    <link rel="stylesheet" href="{% static 'DeveloperHieringHub/hub.css' %}">
+    <title>Dashboard - DHH</title>
+    <link rel="stylesheet" href="{% static 'DeveloperHieringHub/design-system.css' %}">
+    <link rel="stylesheet" href="{% static 'DeveloperHieringHub/navigation.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
+    <style>
+        /* Dashboard-specific styles */
+        .welcome-section {
+            margin-bottom: var(--space-3xl);
+        }
 
+        .welcome-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: var(--space-lg);
+            margin-bottom: var(--space-xl);
+        }
+
+        .welcome-title {
+            font-size: 2rem;
+            margin-bottom: var(--space-sm);
+        }
+
+        .welcome-subtitle {
+            color: var(--color-gray-5);
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            background: var(--color-dark-2);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: var(--radius-lg);
+            padding: 12px 20px;
+            min-width: 300px;
+        }
+
+        .search-bar input {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 1rem;
+            outline: none;
+            width: 100%;
+        }
+
+        .search-bar i {
+            color: var(--color-gray-4);
+        }
+
+        /* Recommendations Section */
+        .recommendations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: var(--space-lg);
+            margin-bottom: var(--space-2xl);
+        }
+
+        .developer-card {
+            background: var(--color-dark-2);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: var(--radius-xl);
+            padding: var(--space-xl);
+            transition: var(--transition-base);
+        }
+
+        .developer-card:hover {
+            border-color: var(--teal-border);
+            box-shadow: var(--shadow-glow);
+            transform: translateY(-5px);
+        }
+
+        .developer-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-lg);
+            margin-bottom: var(--space-lg);
+        }
+
+        .developer-info h4 {
+            color: var(--color-white);
+            margin-bottom: 4px;
+        }
+
+        .developer-info p {
+            color: var(--color-gray-5);
+            font-size: 0.9rem;
+        }
+
+        .developer-skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-lg);
+        }
+
+        .skill-tag {
+            padding: 6px 12px;
+            background: rgba(0, 128, 128, 0.1);
+            color: var(--teal-light);
+            border-radius: var(--radius-full);
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .developer-stats {
+            display: flex;
+            gap: var(--space-lg);
+            padding-top: var(--space-lg);
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .dev-stat {
+            text-align: center;
+        }
+
+        .dev-stat-value {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--teal-light);
+        }
+
+        .dev-stat-label {
+            font-size: 0.8rem;
+            color: var(--color-gray-5);
+        }
+
+        /* Activity Timeline */
+        .timeline-section {
+            margin-bottom: var(--space-2xl);
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 40px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: var(--space-xl);
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: -30px;
+            top: 0;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--teal-primary);
+            box-shadow: 0 0 10px var(--teal-glow);
+        }
+
+        .timeline-dot.success { background: #00ff80; }
+        .timeline-dot.warning { background: #ffc800; }
+
+        .timeline-content {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+        }
+
+        .timeline-title {
+            font-weight: 600;
+            margin-bottom: var(--space-xs);
+        }
+
+        .timeline-time {
+            font-size: 0.85rem;
+            color: var(--color-gray-4);
+            margin-bottom: var(--space-sm);
+        }
+
+        /* Hiring Feed */
+        .hiring-feed {
+            display: grid;
+            gap: var(--space-md);
+        }
+
+        .job-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--space-lg);
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: var(--radius-lg);
+            transition: var(--transition-base);
+        }
+
+        .job-card:hover {
+            background: rgba(255, 255, 255, 0.03);
+            border-color: rgba(0, 128, 128, 0.2);
+        }
+
+        .job-info h4 {
+            margin-bottom: 4px;
+        }
+
+        .job-company {
+            color: var(--color-gray-5);
+            font-size: 0.9rem;
+        }
+
+        .job-tags {
+            display: flex;
+            gap: var(--space-sm);
+            margin-top: var(--space-sm);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: var(--space-3xl);
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px dashed rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-xl);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            color: var(--color-gray-3);
+            margin-bottom: var(--space-lg);
+        }
+
+        .empty-state h3 {
+            margin-bottom: var(--space-md);
+        }
+
+        @media (max-width: 768px) {
+            .welcome-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .search-bar {
+                width: 100%;
+                min-width: auto;
+            }
+
+            .recommendations-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .job-card {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: var(--space-md);
+            }
+        }
+    </style>
+</head>
 <body>
+    <!-- Navbar -->
     <header class="navbar">
-        <div class="liquid-circle"></div>
-        <div class="logo" onclick="window.location.href='{% url 'index' %}'">
-            <span class="logo-box">D</span>
-            <h2>DHH</h2>
+        <div class="navbar-logo" onclick="window.location.href='/'">
+            <div class="logo-box">D</div>
+            <span class="logo-text">DHH</span>
         </div>
-        <nav>
-            <a href="{% url 'index' %}"><i class="fas fa-home"></i> Home</a>
-            <a href="{% url 'developers' %}"><i class="fas fa-code"></i> Developers</a>
-            <a href="{% url 'companies' %}"><i class="fas fa-building"></i> Companies</a>
-            <a href="{% url 'jobs' %}"><i class="fas fa-briefcase"></i> Jobs</a>
-            <a href="{% url 'github-activity' %}"><i class="fab fa-github"></i> GitHub</a>
+
+        <nav class="navbar-nav">
+            <a href="/" class="nav-link"><i class="fas fa-home"></i> Home</a>
+            <a href="/developers.html" class="nav-link"><i class="fas fa-code"></i> Developers</a>
+            <a href="/companies.html" class="nav-link"><i class="fas fa-building"></i> Companies</a>
+            <a href="/jobs.html" class="nav-link"><i class="fas fa-briefcase"></i> Jobs</a>
         </nav>
-        <button class="nav-btn" onclick="window.location.href='{% url 'join-beta' %}'">Join Beta</button>
+
+        <div class="navbar-actions">
+            {% if user %}
+            <button class="btn btn-sm btn-secondary" onclick="window.location.href='/logout/'">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+            {% else %}
+            <button class="btn btn-sm btn-secondary" onclick="window.location.href='/login.html'">
+                <i class="fas fa-sign-in-alt"></i> Login
+            </button>
+            {% endif %}
+            <button class="hamburger" id="hamburgerBtn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
     </header>
 
-    <section class="hub-section">
-        <p class="hub-eyebrow">Operations</p>
-        <h1 class="hub-title">Hiring hub dashboard</h1>
-        <p class="hub-copy">Track the developer marketplace, beta demand, active roles, GitHub activity, and code signals from one place.</p>
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="/"><i class="fas fa-home"></i> Home</a>
+        <a href="/developers.html"><i class="fas fa-code"></i> Developers</a>
+        <a href="/companies.html"><i class="fas fa-building"></i> Companies</a>
+        <a href="/jobs.html"><i class="fas fa-briefcase"></i> Jobs</a>
+        <a href="/profile.html"><i class="fas fa-user"></i> Profile</a>
+        <a href="/settings.html"><i class="fas fa-cog"></i> Settings</a>
+    </div>
 
-        <div class="hub-grid">
-            <div class="metric-card"><h3>{{ stats.beta_joiners }}</h3><p>Beta joiners</p></div>
-            <div class="metric-card"><h3>{{ stats.developers }}</h3><p>Developers</p></div>
-            <div class="metric-card"><h3>{{ stats.hirers }}</h3><p>Hirers</p></div>
-            <div class="metric-card"><h3>{{ stats.commits }}</h3><p>Tracked commits</p></div>
-        </div>
-    </section>
-
-    <section class="hub-section tight">
-        <h2>Latest Beta Joiners</h2>
-        <div class="table-list">
-            {% for joiner in latest_joiners %}
-                <div class="table-row">
-                    <strong>{{ joiner.full_name }}</strong>
-                    <span>{{ joiner.email }}</span>
-                    <span class="status-pill">{{ joiner.get_role_display }}</span>
+    <!-- Dashboard Container -->
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <!-- User Profile -->
+            <div class="sidebar-user">
+                <div class="sidebar-user-avatar">
+                    {% if user.full_name %}{{ user.full_name|first|upper }}{% else %}U{% endif %}
                 </div>
-            {% empty %}
-                <div class="empty-state">No beta joiners yet.</div>
-            {% endfor %}
-        </div>
-    </section>
-
-    <section class="hub-section tight">
-        <h2>Recent GitHub Commits</h2>
-        <div class="table-list">
-            {% for commit in latest_commits %}
-                <div class="table-row">
-                    <strong>{{ commit.repository.full_name }}</strong>
-                    <span>{{ commit.developer.user.full_name }}</span>
-                    <span>{{ commit.committed_at|date:"M d, Y" }}</span>
+                <div class="sidebar-user-info">
+                    <div class="sidebar-user-name">
+                        {% if user.full_name %}{{ user.full_name }}{% else %}User{% endif %}
+                    </div>
+                    <div class="sidebar-user-role">
+                        {% if user.role == 'developer' %}Developer{% elif user.role == 'hirer' %}Hirer{% else %}Member{% endif %}
+                    </div>
                 </div>
-            {% empty %}
-                <div class="empty-state">Connect GitHub data to see commits here.</div>
-            {% endfor %}
-        </div>
-    </section>
+            </div>
+
+            <div class="sidebar-divider"></div>
+
+            <!-- Navigation -->
+            <div class="sidebar-section">
+                <div class="sidebar-label">Main</div>
+                <nav class="sidebar-nav">
+                    <a href="/dashboard.html" class="sidebar-link active">
+                        <i class="fas fa-th-large"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="/developers.html" class="sidebar-link">
+                        <i class="fas fa-code"></i>
+                        <span>Developers</span>
+                    </a>
+                    <a href="/companies.html" class="sidebar-link">
+                        <i class="fas fa-building"></i>
+                        <span>Companies</span>
+                    </a>
+                    <a href="/jobs.html" class="sidebar-link">
+                        <i class="fas fa-briefcase"></i>
+                        <span>Jobs</span>
+                    </a>
+                </nav>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-label">Personal</div>
+                <nav class="sidebar-nav">
+                    <a href="/profile.html" class="sidebar-link">
+                        <i class="fas fa-user"></i>
+                        <span>Profile</span>
+                    </a>
+                    <a href="/shortlist.html" class="sidebar-link">
+                        <i class="fas fa-bookmark"></i>
+                        <span>Saved Developers</span>
+                    </a>
+                    <a href="/github.html" class="sidebar-link">
+                        <i class="fab fa-github"></i>
+                        <span>GitHub Activity</span>
+                    </a>
+                </nav>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-label">Settings</div>
+                <nav class="sidebar-nav">
+                    <a href="/settings.html" class="sidebar-link">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </a>
+                    <a href="/security.html" class="sidebar-link">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Security</span>
+                    </a>
+                </nav>
+            </div>
+
+            <div class="sidebar-divider"></div>
+
+            <a href="/logout/" class="sidebar-link">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </a>
+        </aside>
+
+        <!-- Overlay for mobile -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Welcome Section -->
+            <section class="welcome-section">
+                <div class="welcome-header">
+                    <div>
+                        <h1 class="welcome-title">Welcome back! 👋</h1>
+                        <p class="welcome-subtitle">Here's what's happening in the developer ecosystem today.</p>
+                    </div>
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search developers, companies...">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Stats Grid -->
+            <section class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-card-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-card-value">{{ stats.developers|default:"0" }}</div>
+                    <div class="stat-card-label">Total Developers</div>
+                    <div class="stat-card-change">
+                        <i class="fas fa-arrow-up"></i> 12%
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-card-icon">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <div class="stat-card-value">{{ stats.hirers|default:"0" }}</div>
+                    <div class="stat-card-label">Active Companies</div>
+                    <div class="stat-card-change">
+                        <i class="fas fa-arrow-up"></i> 8%
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-card-icon">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <div class="stat-card-value">{{ stats.jobs|default:"0" }}</div>
+                    <div class="stat-card-label">Open Positions</div>
+                    <div class="stat-card-change negative">
+                        <i class="fas fa-arrow-down"></i> 3%
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-card-icon">
+                        <i class="fab fa-github"></i>
+                    </div>
+                    <div class="stat-card-value">{{ stats.commits|default:"0" }}</div>
+                    <div class="stat-card-label">Tracked Commits</div>
+                    <div class="stat-card-change">
+                        <i class="fas fa-arrow-up"></i> 24%
+                    </div>
+                </div>
+            </section>
+
+            <!-- Developer Recommendations -->
+            <section class="content-section">
+                <div class="section-header">
+                    <h2 class="section-title">Recommended Developers</h2>
+                    <a href="/developers.html" class="btn btn-sm btn-secondary">View All</a>
+                </div>
+
+                <div class="recommendations-grid">
+                    {% for developer in latest_developers|slice:":3" %}
+                    <div class="developer-card">
+                        <div class="developer-header">
+                            <div class="avatar avatar-lg">
+                                {{ developer.user.full_name|first|upper }}
+                            </div>
+                            <div class="developer-info">
+                                <h4>{{ developer.user.full_name }}</h4>
+                                <p>{{ developer.headline|default:"Developer" }}</p>
+                            </div>
+                        </div>
+                        <div class="developer-skills">
+                            <span class="skill-tag">Python</span>
+                            <span class="skill-tag">JavaScript</span>
+                            <span class="skill-tag">React</span>
+                        </div>
+                        <div class="developer-stats">
+                            <div class="dev-stat">
+                                <div class="dev-stat-value">96</div>
+                                <div class="dev-stat-label">GitHub Score</div>
+                            </div>
+                            <div class="dev-stat">
+                                <div class="dev-stat-value">{{ developer.years_experience|default:"0" }}</div>
+                                <div class="dev-stat-label">Years Exp</div>
+                            </div>
+                            <div class="dev-stat">
+                                <div class="dev-stat-value">24</div>
+                                <div class="dev-stat-label">Projects</div>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="empty-state">
+                        <i class="fas fa-code"></i>
+                        <h3>No developers yet</h3>
+                        <p>Developers will appear here as they join the platform.</p>
+                        <a href="/join-beta.html" class="btn btn-primary mt-3">Invite Developers</a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+
+            <!-- Recent Activity Timeline -->
+            <section class="content-section timeline-section">
+                <div class="section-header">
+                    <h2 class="section-title">Recent Activity</h2>
+                </div>
+
+                <div class="timeline">
+                    {% for commit in latest_commits|slice:":5" %}
+                    <div class="timeline-item">
+                        <div class="timeline-dot success"></div>
+                        <div class="timeline-content">
+                            <h4 class="timeline-title">New commit in {{ commit.repository.full_name|default:"repository" }}</h4>
+                            <p class="timeline-time">{{ commit.committed_at|timesince }} ago</p>
+                            <p class="timeline-description">
+                                {{ commit.developer.user.full_name }} pushed to {{ commit.repository.name|default:"main" }}
+                            </p>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h4 class="timeline-title">No recent activity</h4>
+                            <p class="timeline-time">Connect GitHub to see activity</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+
+            <!-- Latest Jobs -->
+            <section class="content-section">
+                <div class="section-header">
+                    <h2 class="section-title">Latest Job Openings</h2>
+                    <a href="/jobs.html" class="btn btn-sm btn-secondary">View All Jobs</a>
+                </div>
+
+                <div class="hiring-feed">
+                    {% for job in latest_jobs|slice:":5" %}
+                    <div class="job-card">
+                        <div class="job-info">
+                            <h4>{{ job.title|default:"Software Engineer" }}</h4>
+                            <p class="job-company">{{ job.company|default:"Company" }}</p>
+                            <div class="job-tags">
+                                <span class="badge badge-teal">Full-time</span>
+                                <span class="badge badge-teal">Remote</span>
+                            </div>
+                        </div>
+                        <a href="/jobs.html" class="btn btn-sm btn-primary">Apply</a>
+                    </div>
+                    {% empty %}
+                    <div class="empty-state">
+                        <i class="fas fa-briefcase"></i>
+                        <h3>No job postings yet</h3>
+                        <p>Companies will post jobs here soon.</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // Mobile menu toggle
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+        hamburgerBtn.addEventListener('click', () => {
+            hamburgerBtn.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+            sidebar.classList.toggle('active');
+            sidebarOverlay.classList.toggle('active');
+        });
+
+        sidebarOverlay.addEventListener('click', () => {
+            hamburgerBtn.classList.remove('active');
+            mobileMenu.classList.remove('active');
+            sidebar.classList.remove('active');
+            sidebarOverlay.classList.remove('active');
+        });
+
+        // Add animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.stat-card, .developer-card, .job-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
 </body>
-
 </html>

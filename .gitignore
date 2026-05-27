@@ -1,7 +1,51 @@
-.env
-*.sqlite3
+```
+# Python
 __pycache__/
-*.py[cod]
-.venv/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
 venv/
+.venv/
+.ENV
+.ENV.*
+.venv/
+.venv.*
+
+# Django
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Static files
 staticfiles/
+media/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local
+*.env
+*.env.*
+
+# Coverage
+.coverage
+htmlcov/
+coverage/
+
+# Build
+build/
+dist/
+*.egg-info/
+```

@@ -1,0 +1,403 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading - DHH</title>
+    <link rel="stylesheet" href="{% static 'DeveloperHieringHub/design-system.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #000;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .loading-container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+        }
+
+        /* 3D CUBE LOADER */
+        .cube-loader {
+            width: 100px;
+            height: 100px;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: rotateCube 3s ease-in-out infinite;
+        }
+
+        @keyframes rotateCube {
+            0%, 100% {
+                transform: rotateX(-20deg) rotateY(0deg);
+            }
+            25% {
+                transform: rotateX(-20deg) rotateY(90deg);
+            }
+            50% {
+                transform: rotateX(-20deg) rotateY(180deg);
+            }
+            75% {
+                transform: rotateX(-20deg) rotateY(270deg);
+            }
+        }
+
+        .cube-face {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            border: 2px solid rgba(0, 200, 200, 0.8);
+            background: rgba(0, 128, 128, 0.1);
+            box-shadow: 0 0 30px rgba(0, 128, 128, 0.3),
+                        inset 0 0 30px rgba(0, 128, 128, 0.1);
+        }
+
+        .cube-front  { transform: translateZ(50px); }
+        .cube-back   { transform: rotateY(180deg) translateZ(50px); }
+        .cube-right  { transform: rotateY(90deg) translateZ(50px); }
+        .cube-left   { transform: rotateY(-90deg) translateZ(50px); }
+        .cube-top    { transform: rotateX(90deg) translateZ(50px); }
+        .cube-bottom { transform: rotateX(-90deg) translateZ(50px); }
+
+        /* CENTER GLOW */
+        .cube-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            background: radial-gradient(circle, rgba(0, 255, 255, 0.8), transparent 70%);
+            border-radius: 50%;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.5);
+                opacity: 0.5;
+            }
+        }
+
+        /* FLOATING PARTICLES */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(0, 200, 200, 0.6);
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(0, 128, 128, 0.8);
+            animation: floatParticle linear infinite;
+        }
+
+        @keyframes floatParticle {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* LOGO */
+        .loading-logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .loading-logo-box {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #008080, #00cccc);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1.8rem;
+            color: black;
+            box-shadow: 0 0 30px rgba(0, 128, 128, 0.6);
+            animation: glowLogo 2s ease-in-out infinite;
+        }
+
+        @keyframes glowLogo {
+            0%, 100% {
+                box-shadow: 0 0 30px rgba(0, 128, 128, 0.6);
+            }
+            50% {
+                box-shadow: 0 0 60px rgba(0, 128, 128, 1);
+            }
+        }
+
+        .loading-logo-text {
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #fff, #00cccc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* LOADING TEXT */
+        .loading-text {
+            font-size: 1.2rem;
+            color: #888;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            animation: fadeInOut 2s ease-in-out infinite;
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% {
+                opacity: 0.5;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+
+        /* PROGRESS BAR */
+        .progress-container {
+            width: 300px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-full);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #008080, #00cccc, #008080);
+            background-size: 200% 100%;
+            border-radius: var(--radius-full);
+            animation: progressAnimation 2s ease-in-out infinite, shimmer 1.5s linear infinite;
+            width: 0%;
+        }
+
+        @keyframes progressAnimation {
+            0% {
+                width: 0%;
+            }
+            50% {
+                width: 70%;
+            }
+            100% {
+                width: 100%;
+            }
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -200% 0;
+            }
+            100% {
+                background-position: 200% 0;
+            }
+        }
+
+        /* BACKGROUND GRADIENT ORBS */
+        .gradient-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.3;
+            animation: floatOrb 10s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(0, 128, 128, 0.4), transparent 70%);
+            top: -200px;
+            left: -200px;
+        }
+
+        .orb-2 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(0, 200, 200, 0.3), transparent 70%);
+            bottom: -150px;
+            right: -150px;
+            animation-delay: -5s;
+        }
+
+        @keyframes floatOrb {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+            }
+            33% {
+                transform: translate(50px, -50px) scale(1.1);
+            }
+            66% {
+                transform: translate(-50px, 50px) scale(0.9);
+            }
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .cube-loader {
+                width: 70px;
+                height: 70px;
+            }
+
+            .cube-face {
+                width: 70px;
+                height: 70px;
+            }
+
+            .cube-front, .cube-back { transform: translateZ(35px); }
+            .cube-right { transform: rotateY(90deg) translateZ(35px); }
+            .cube-left { transform: rotateY(-90deg) translateZ(35px); }
+            .cube-top { transform: rotateX(90deg) translateZ(35px); }
+            .cube-bottom { transform: rotateX(-90deg) translateZ(35px); }
+
+            .cube-center {
+                width: 25px;
+                height: 25px;
+            }
+
+            .loading-logo-box {
+                width: 40px;
+                height: 40px;
+                font-size: 1.4rem;
+            }
+
+            .loading-logo-text {
+                font-size: 1.5rem;
+            }
+
+            .progress-container {
+                width: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Gradient Orbs -->
+    <div class="gradient-orb orb-1"></div>
+    <div class="gradient-orb orb-2"></div>
+
+    <!-- Floating Particles -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Loading Container -->
+    <div class="loading-container">
+        <!-- 3D Cube Loader -->
+        <div class="cube-loader">
+            <div class="cube-face cube-front"></div>
+            <div class="cube-face cube-back"></div>
+            <div class="cube-face cube-right"></div>
+            <div class="cube-face cube-left"></div>
+            <div class="cube-face cube-top"></div>
+            <div class="cube-face cube-bottom"></div>
+            <div class="cube-center"></div>
+        </div>
+
+        <!-- Logo -->
+        <div class="loading-logo">
+            <div class="loading-logo-box">D</div>
+            <span class="loading-logo-text">DHH</span>
+        </div>
+
+        <!-- Loading Text -->
+        <p class="loading-text">Loading DHH...</p>
+
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-bar"></div>
+        </div>
+    </div>
+
+    <script>
+        // Generate floating particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 50;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                // Random positioning and animation
+                const left = Math.random() * 100;
+                const delay = Math.random() * 5;
+                const duration = 5 + Math.random() * 10;
+                const size = 2 + Math.random() * 4;
+                
+                particle.style.left = `${left}%`;
+                particle.style.animationDelay = `${delay}s`;
+                particle.style.animationDuration = `${duration}s`;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Auto redirect after loading
+        function redirectAfterLoad() {
+            setTimeout(() => {
+                // Check if user is authenticated (you can modify this logic)
+                const isAuthenticated = document.cookie.includes('platform_user_id');
+                
+                if (isAuthenticated) {
+                    window.location.href = '/dashboard.html';
+                } else {
+                    window.location.href = '/';
+                }
+            }, 3000); // 3 seconds loading time
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            createParticles();
+            redirectAfterLoad();
+        });
+    </script>
+</body>
+</html>
