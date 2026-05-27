@@ -56,6 +56,7 @@ class PlatformUser(TimeStampedModel):
     )
     full_name = models.CharField(max_length=160)
     email = models.EmailField(unique=True)
+    password = models.CharField(max_length=128, blank=True, default='')
     role = models.CharField(max_length=20, choices=ROLE_CHOICES)
     location = models.CharField(max_length=160, blank=True)
     bio = models.TextField(blank=True)

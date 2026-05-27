@@ -77,8 +77,18 @@ class GitHubConnectionForm(forms.Form):
 
 class EmailLoginForm(forms.Form):
     email = forms.EmailField(
-        widget=forms.EmailInput(attrs={'placeholder': 'Email address'}),
+        widget=forms.EmailInput(attrs={'placeholder': 'Email address', 'class': 'form-input'}),
     )
+
+
+class LoginForm(forms.Form):
+    email = forms.EmailField(
+        widget=forms.EmailInput(attrs={'placeholder': 'you@example.com', 'class': 'form-input', 'id': 'id_email', 'autocomplete': 'email'}),
+    )
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={'placeholder': 'Enter your password', 'class': 'form-input', 'id': 'id_password', 'autocomplete': 'current-password'}),
+    )
+    remember = forms.BooleanField(required=False)
 
     def clean_email(self):
         return self.cleaned_data['email'].lower()

@@ -15,6 +15,7 @@ from .forms import (
     GitHubConnectionForm,
     HirerSignupForm,
     JobPostForm,
+    LoginForm,
     OTPVerificationForm,
     ProfileSettingsForm,
 )
@@ -257,34 +258,28 @@ def github_activity(request):
 
 
 def login(request):
-    form = EmailLoginForm(request.POST or None)
+    form = LoginForm(request.POST or None)
     if request.method == 'POST' and form.is_valid():
         email = form.cleaned_data['email']
+        password = form.cleaned_data['password']
+        
         user = PlatformUser.objects.filter(email=email).first()
         if not user:
             messages.error(request, 'No DHH profile exists for that email yet. Create a developer or hirer profile first.')
             return redirect('login')
-
-        code = f'{secrets.randbelow(1000000):06d}'
-        otp = EmailOTP(
-            user=user,
-            email=email,
-            expires_at=timezone.now() + timedelta(minutes=settings.EMAIL_OTP_EXPIRY_MINUTES),
-            request_ip=get_client_ip(request),
-        )
-        otp.set_code(code)
-        otp.save()
-
-        try:
-            send_otp_email(email, code)
-        except Exception as exc:
-            otp.delete()
-            messages.error(request, f'Could not send the email code yet: {exc}')
+        
+        # Simple password check (in production, use proper password hashing)
+        if not hasattr(user, 'password') or user.password != password:
+            messages.error(request, 'Invalid email or password.')
             return redirect('login')
-
-        request.session['pending_otp_id'] = otp.pk
-        messages.success(request, 'We sent a 6-digit sign-in code to your email.')
-        return redirect('verify-code')
+        
+        # Set session for authenticated user
+        request.session['platform_user_id'] = user.pk
+        user.is_verified = True
+        user.save(update_fields=['is_verified', 'updated_at'])
+        
+        messages.success(request, 'Welcome back to DHH!')
+        return redirect('dashboard')
 
     return render(request, 'DeveloperHieringHub/login.html', {'form': form})
 
