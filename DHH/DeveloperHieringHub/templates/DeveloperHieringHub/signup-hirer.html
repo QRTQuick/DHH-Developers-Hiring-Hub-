@@ -5,26 +5,516 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Hirer Profile</title>
-    <link rel="stylesheet" href="{% static 'DeveloperHieringHub/join-beta.css' %}">
-    <link rel="stylesheet" href="{% static 'DeveloperHieringHub/hub.css' %}">
+    <title>Join as Hirer - DHH</title>
+    
+    <link rel="stylesheet" href="{% static 'DeveloperHieringHub/design-system.css' %}">
+    <link rel="stylesheet" href="{% static 'DeveloperHieringHub/navigation.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        .signup-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-4xl) var(--space-lg);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .signup-page::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(128, 0, 128, 0.15) 0%, transparent 70%);
+            opacity: 0.5;
+            animation: float 10s ease-in-out infinite;
+        }
+        
+        .signup-page::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -10%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(180, 0, 180, 0.1) 0%, transparent 70%);
+            opacity: 0.4;
+            animation: float 12s ease-in-out infinite reverse;
+        }
+        
+        .signup-container {
+            width: 100%;
+            max-width: 560px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .signup-card {
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: var(--radius-xl);
+            padding: var(--space-3xl);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .signup-header {
+            text-align: center;
+            margin-bottom: var(--space-2xl);
+        }
+        
+        .signup-logo {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: var(--space-lg);
+        }
+        
+        .signup-logo-box {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1.8rem;
+            color: var(--color-black);
+            box-shadow: 0 0 30px rgba(168, 85, 247, 0.4);
+        }
+        
+        .signup-title {
+            font-size: 2rem;
+            margin-bottom: var(--space-sm);
+            color: var(--color-white);
+        }
+        
+        .badge-hirer {
+            display: inline-block;
+            padding: 6px 16px;
+            background: rgba(168, 85, 247, 0.2);
+            border: 1px solid rgba(168, 85, 247, 0.4);
+            border-radius: var(--radius-full);
+            color: #d8b4fe;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: var(--space-md);
+        }
+        
+        .signup-subtitle {
+            color: var(--color-gray-5);
+            font-size: 1rem;
+            margin-top: var(--space-md);
+        }
+        
+        .signup-form {
+            margin-bottom: var(--space-xl);
+        }
+        
+        .form-group {
+            margin-bottom: var(--space-lg);
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: var(--space-sm);
+            font-weight: 600;
+            color: var(--color-gray-6);
+            font-size: 0.9rem;
+        }
+        
+        .form-input-wrapper {
+            position: relative;
+        }
+        
+        .form-input-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--color-gray-4);
+            transition: var(--transition-base);
+        }
+        
+        .form-input,
+        .form-textarea,
+        .form-select {
+            width: 100%;
+            padding: 16px 16px 16px 48px;
+            background: var(--color-dark-2);
+            border: 1px solid var(--color-gray-2);
+            border-radius: var(--radius-md);
+            color: var(--color-white);
+            font-family: var(--font-family);
+            font-size: 1rem;
+            transition: var(--transition-base);
+        }
+        
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .form-input:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: #a855f7;
+            box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.2);
+        }
+        
+        .form-input:focus + .form-input-icon,
+        .form-textarea:focus + .form-input-icon {
+            color: #d8b4fe;
+        }
+        
+        .form-input::placeholder,
+        .form-textarea::placeholder {
+            color: var(--color-gray-4);
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-md);
+        }
+        
+        .btn-signup {
+            width: 100%;
+            padding: 16px;
+            font-size: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+            border: none;
+        }
+        
+        .btn-signup:hover {
+            background: linear-gradient(135deg, #9333ea 0%, #6d28d9 100%);
+        }
+        
+        .signup-divider {
+            display: flex;
+            align-items: center;
+            gap: var(--space-lg);
+            margin: var(--space-xl) 0;
+            color: var(--color-gray-4);
+            font-size: 0.9rem;
+        }
+        
+        .signup-divider::before,
+        .signup-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .signup-footer {
+            text-align: center;
+            color: var(--color-gray-5);
+            font-size: 0.95rem;
+        }
+        
+        .signup-footer a {
+            color: #d8b4fe;
+            font-weight: 600;
+        }
+        
+        .signup-footer a:hover {
+            text-decoration: underline;
+        }
+        
+        .messages {
+            margin-bottom: var(--space-lg);
+            padding: var(--space-md);
+            border-radius: var(--radius-md);
+            background: rgba(255, 100, 100, 0.1);
+            border: 1px solid rgba(255, 100, 100, 0.3);
+            color: #ff6464;
+            font-size: 0.9rem;
+        }
+        
+        .messages.success {
+            background: rgba(0, 255, 128, 0.1);
+            border: 1px solid rgba(0, 255, 128, 0.3);
+            color: #00ff80;
+        }
+        
+        .help-text {
+            font-size: 0.85rem;
+            color: var(--color-gray-4);
+            margin-top: 6px;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .signup-card {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+        
+        @media (max-width: 768px) {
+            .signup-page {
+                padding: var(--space-2xl) var(--space-md);
+            }
+            
+            .signup-card {
+                padding: var(--space-2xl);
+            }
+            
+            .signup-title {
+                font-size: 1.5rem;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 
 <body>
-    <section class="hub-section">
-        <p class="hub-eyebrow">Companies</p>
-        <h1 class="hub-title">Create hirer profile</h1>
-        <div class="form-panel">
-            <form method="post">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit">Create Hirer</button>
-            </form>
+    <!-- NAVBAR -->
+    <header class="navbar">
+        <div class="navbar-logo" onclick="window.location.href='{% url 'index' %}'">
+            <div class="logo-box">D</div>
+            <h2 class="logo-text">DHH</h2>
         </div>
-        <div class="inline-actions">
-            <a class="ghost-link" href="{% url 'companies' %}">Back to Companies</a>
+        
+        <nav class="navbar-nav">
+            <a href="{% url 'index' %}" class="nav-link">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+            <a href="{% url 'pricing' %}" class="nav-link">
+                <i class="fas fa-tag"></i>
+                <span>Pricing</span>
+            </a>
+        </nav>
+        
+        <div class="navbar-actions">
+            <button class="btn btn-secondary btn-sm" onclick="window.location.href='{% url 'login' %}'">
+                Login
+            </button>
+            <button class="btn btn-primary btn-sm" onclick="window.location.href='{% url 'hirer-signup' %}'">
+                Sign Up
+            </button>
         </div>
-    </section>
+        
+        <button class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </header>
+    
+    <!-- MOBILE MENU -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="{% url 'index' %}"><i class="fas fa-home"></i> Home</a>
+        <a href="{% url 'pricing' %}"><i class="fas fa-tag"></i> Pricing</a>
+        <a href="{% url 'login' %}"><i class="fas fa-sign-in-alt"></i> Login</a>
+        <a href="{% url 'hirer-signup' %}"><i class="fas fa-user-plus"></i> Sign Up</a>
+    </div>
+
+    <!-- SIGNUP PAGE -->
+    <main class="signup-page">
+        <div class="signup-container">
+            <div class="signup-card">
+                <!-- HEADER -->
+                <div class="signup-header">
+                    <div class="signup-logo">
+                        <div class="signup-logo-box">D</div>
+                    </div>
+                    <h1 class="signup-title">Create Hirer Profile</h1>
+                    <span class="badge-hirer"><i class="fas fa-building"></i> For Companies</span>
+                    <p class="signup-subtitle">Find and hire top developers based on real code</p>
+                </div>
+                
+                <!-- MESSAGES -->
+                {% if messages %}
+                    <div class="messages">
+                        {% for message in messages %}
+                            <p style="margin: 0;">{{ message }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                
+                <!-- SIGNUP FORM -->
+                <form method="post" class="signup-form">
+                    {% csrf_token %}
+                    
+                    <!-- Full Name -->
+                    <div class="form-group">
+                        <label class="form-label" for="id_full_name">Your Name *</label>
+                        <div class="form-input-wrapper">
+                            <input 
+                                type="text" 
+                                name="full_name" 
+                                id="id_full_name" 
+                                class="form-input" 
+                                placeholder="Jane Smith"
+                                required
+                                value="{{ form.full_name.value|default:'' }}"
+                            >
+                            <i class="fas fa-user form-input-icon"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Email -->
+                    <div class="form-group">
+                        <label class="form-label" for="id_email">Work Email *</label>
+                        <div class="form-input-wrapper">
+                            <input 
+                                type="email" 
+                                name="email" 
+                                id="id_email" 
+                                class="form-input" 
+                                placeholder="jane@company.com"
+                                required
+                                value="{{ form.email.value|default:'' }}"
+                            >
+                            <i class="fas fa-envelope form-input-icon"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Company Name -->
+                    <div class="form-group">
+                        <label class="form-label" for="id_company_name">Company Name *</label>
+                        <div class="form-input-wrapper">
+                            <input 
+                                type="text" 
+                                name="company_name" 
+                                id="id_company_name" 
+                                class="form-input" 
+                                placeholder="Acme Inc."
+                                required
+                                value="{{ form.company_name.value|default:'' }}"
+                            >
+                            <i class="fas fa-building form-input-icon"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Company Website & Size -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="id_company_website">Company Website</label>
+                            <div class="form-input-wrapper">
+                                <input 
+                                    type="url" 
+                                    name="company_website" 
+                                    id="id_company_website" 
+                                    class="form-input" 
+                                    placeholder="https://company.com"
+                                    value="{{ form.company_website.value|default:'' }}"
+                                >
+                                <i class="fas fa-globe form-input-icon"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="id_company_size">Company Size</label>
+                            <div class="form-input-wrapper">
+                                <select 
+                                    name="company_size" 
+                                    id="id_company_size" 
+                                    class="form-input"
+                                    style="appearance: none;"
+                                >
+                                    <option value="">Select size</option>
+                                    <option value="1-10">1-10 employees</option>
+                                    <option value="11-50">11-50 employees</option>
+                                    <option value="51-200">51-200 employees</option>
+                                    <option value="201-500">201-500 employees</option>
+                                    <option value="500+">500+ employees</option>
+                                </select>
+                                <i class="fas fa-users form-input-icon"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Hiring Needs -->
+                    <div class="form-group">
+                        <label class="form-label" for="id_hiring_needs">Hiring Needs</label>
+                        <div class="form-input-wrapper">
+                            <textarea 
+                                name="hiring_needs" 
+                                id="id_hiring_needs" 
+                                class="form-textarea" 
+                                placeholder="Tell us about the roles you're looking to fill, tech stack requirements, and your ideal candidate profile..."
+                                rows="4"
+                            >{{ form.hiring_needs.value|default:'' }}</textarea>
+                            <i class="fas fa-align-left form-input-icon"></i>
+                        </div>
+                        <p class="help-text">This helps us match you with relevant developers</p>
+                    </div>
+                    
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-primary btn-signup">
+                        Create Profile & Access Dashboard
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </form>
+                
+                <!-- FOOTER -->
+                <div class="signup-footer">
+                    <p>Already have an account? <a href="{% url 'login' %}">Sign in</a></p>
+                    <p style="margin-top: 8px;">
+                        Are you a developer? <a href="{% url 'developer-signup' %}">Create developer profile</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Mobile Menu Toggle
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobileMenu');
+        
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+        });
+        
+        document.addEventListener('click', (e) => {
+            if (!hamburger.contains(e.target) && !mobileMenu.contains(e.target)) {
+                hamburger.classList.remove('active');
+                mobileMenu.classList.remove('active');
+            }
+        });
+        
+        // Form validation visual feedback
+        const inputs = document.querySelectorAll('.form-input, .form-textarea');
+        inputs.forEach(input => {
+            input.addEventListener('focus', () => {
+                input.parentElement.classList.add('focused');
+            });
+            
+            input.addEventListener('blur', () => {
+                if (!input.value) {
+                    input.parentElement.classList.remove('focused');
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
