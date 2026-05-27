@@ -1,21 +1,24 @@
-```
 # Python
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
+*.py[cod]
+*$py.class
+*.so
 .Python
-env/
-venv/
-.venv/
-.ENV
-.ENV.local
-.env
-.env.local
-.env.*
-.python-version
-pip-log.txt
-pip-delete-this-directory.txt
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
 
 # Django
 *.log
@@ -24,7 +27,6 @@ db.sqlite3
 db.sqlite3-journal
 media/
 staticfiles/
-.DS_Store
 
 # IDE
 .vscode/
@@ -33,7 +35,50 @@ staticfiles/
 *.swo
 *.tmp
 
+# Environment
+.env
+.env.local
+.env.dev
+.env.test
+.env.prod
+*.env*
+
 # OS
 .DS_Store
 Thumbs.db
-```
+
+# Coverage
+.coverage
+coverage/
+htmlcov/
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Pytest
+.pytest_cache/
+.pytest_metadata
+
+# Mypy
+.mypy_cache/
+
+# Migration files should not be ignored as they are part of the source code
+# 0003_platformuser_password.py should be tracked by git
