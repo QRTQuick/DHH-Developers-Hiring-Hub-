@@ -197,8 +197,14 @@ def developer_signup(request):
             portfolio_url=form.cleaned_data['portfolio_url'],
         )
         GitHubAuth.objects.create(user=user, username=form.cleaned_data['github_username'])
-        messages.success(request, 'Developer profile created.')
-        return redirect('developers')
+        
+        # Set session for authenticated user
+        request.session['platform_user_id'] = user.pk
+        user.is_verified = True
+        user.save(update_fields=['is_verified', 'updated_at'])
+        
+        messages.success(request, 'Developer profile created. Welcome to DHH!')
+        return redirect('dashboard')
 
     return render(request, 'DeveloperHieringHub/signup-developer.html', {'form': form})
 
@@ -218,8 +224,14 @@ def hirer_signup(request):
             company_size=form.cleaned_data['company_size'],
             hiring_needs=form.cleaned_data['hiring_needs'],
         )
-        messages.success(request, 'Hirer profile created.')
-        return redirect('companies')
+        
+        # Set session for authenticated user
+        request.session['platform_user_id'] = user.pk
+        user.is_verified = True
+        user.save(update_fields=['is_verified', 'updated_at'])
+        
+        messages.success(request, 'Hirer profile created. Welcome to DHH!')
+        return redirect('dashboard')
 
     return render(request, 'DeveloperHieringHub/signup-hirer.html', {'form': form})
 
