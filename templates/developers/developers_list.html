@@ -1,0 +1,287 @@
+{% extends 'base.html' %}
+
+{% block title %}Explore Developers | DHH{% endblock %}
+
+{% block content %}
+<!-- Navbar -->
+<nav class="fixed top-0 left-0 right-0 z-50 glass">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16 md:h-20">
+            <a href="/" class="flex items-center gap-2">
+                <i class="fas fa-code text-white text-xl glow-text"></i>
+                <span class="font-poppins font-bold text-xl">DHH</span>
+            </a>
+            
+            <div class="hidden md:flex items-center gap-8">
+                <a href="/" class="text-secondary hover:text-white transition-colors">Home</a>
+                <a href="#" class="text-white">Explore Developers</a>
+                <a href="{% url 'dashboard' %}" class="text-secondary hover:text-white transition-colors">Dashboard</a>
+            </div>
+            
+            <button id="mobile-menu-btn" class="md:hidden text-white p-2">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+        </div>
+        
+        <div id="mobile-menu" class="mobile-menu md:hidden pb-4">
+            <div class="flex flex-col gap-4">
+                <a href="/" class="text-secondary hover:text-white transition-colors py-2">Home</a>
+                <a href="#" class="text-white py-2">Explore Developers</a>
+                <a href="{% url 'dashboard' %}" class="text-secondary hover:text-white transition-colors py-2">Dashboard</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="min-h-screen pt-20 md:pt-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <h1 class="font-poppins text-3xl md:text-5xl font-bold mb-4">Discover Developers</h1>
+            <p class="text-secondary text-lg max-w-2xl mx-auto mb-8">
+                Find talented engineers through their real code, contributions, and shipped projects
+            </p>
+            
+            <!-- Search Bar -->
+            <div class="max-w-2xl mx-auto">
+                <div class="relative">
+                    <input type="text" class="input-dark pl-12 pr-4 py-4 text-lg" placeholder="Search by username, stack, or technology...">
+                    <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-secondary text-xl"></i>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Filter Tags -->
+        <div class="flex flex-wrap justify-center gap-3 mb-12">
+            <button class="px-4 py-2 bg-white text-black rounded-full font-medium hover:bg-gray-200 transition-all">
+                All
+            </button>
+            <button class="px-4 py-2 glass-light rounded-full text-secondary hover:text-white hover:border-white transition-all">
+                <i class="fab fa-react mr-2"></i>React
+            </button>
+            <button class="px-4 py-2 glass-light rounded-full text-secondary hover:text-white hover:border-white transition-all">
+                <i class="fab fa-python mr-2"></i>Python
+            </button>
+            <button class="px-4 py-2 glass-light rounded-full text-secondary hover:text-white hover:border-white transition-all">
+                <i class="fas fa-server mr-2"></i>Django
+            </button>
+            <button class="px-4 py-2 glass-light rounded-full text-secondary hover:text-white hover:border-white transition-all">
+                <i class="fab fa-node-js mr-2"></i>Node.js
+            </button>
+            <button class="px-4 py-2 glass-light rounded-full text-secondary hover:text-white hover:border-white transition-all">
+                <i class="fas fa-laptop-code mr-2"></i>Frontend
+            </button>
+            <button class="px-4 py-2 glass-light rounded-full text-secondary hover:text-white hover:border-white transition-all">
+                <i class="fas fa-database mr-2"></i>Backend
+            </button>
+        </div>
+        
+        <!-- Developers Grid -->
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Developer Card 1 -->
+            <div class="card glow-hover">
+                <div class="flex items-start justify-between mb-4">
+                    <img src="https://avatars.githubusercontent.com/u/1?v=4" alt="Developer" class="w-16 h-16 rounded-full border-2 border-border">
+                    <i class="fab fa-github text-2xl text-secondary"></i>
+                </div>
+                <h3 class="font-semibold text-lg mb-1">@monalisa</h3>
+                <p class="text-secondary text-sm mb-4 line-clamp-2">Full-stack developer passionate about open source. Building scalable web applications.</p>
+                <div class="flex flex-wrap gap-2 mb-4">
+                    <span class="px-3 py-1 glass-light rounded-full text-xs">React</span>
+                    <span class="px-3 py-1 glass-light rounded-full text-xs">Python</span>
+                    <span class="px-3 py-1 glass-light rounded-full text-xs">Node.js</span>
+                </div>
+                <div class="flex items-center justify-between text-sm text-secondary mb-4">
+                    <span><i class="fas fa-star"></i> 2.3k</span>
+                    <span><i class="fas fa-fire"></i> 45 day streak</span>
+                    <span><i class="fas fa-repo"></i> 67 repos</span>
+                </div>
+                <div class="border-t border-border pt-4">
+                    <p class="text-xs text-secondary mb-2">Top Repository</p>
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-folder text-sm"></i>
+                        <span class="text-sm font-medium">awesome-project</span>
+                    </div>
+                </div>
+                <a href="#" class="btn-primary w-full justify-center mt-4">
+                    View Profile <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            
+            <!-- Developer Card 2 -->
+            <div class="card glow-hover">
+                <div class="flex items-start justify-between mb-4">
+                    <img src="https://avatars.githubusercontent.com/u/2?v=4" alt="Developer" class="w-16 h-16 rounded-full border-2 border-border">
+                    <i class="fab fa-github text-2xl text-secondary"></i>
+                </div>
+                <h3 class="font-semibold text-lg mb-1">@defunkt</h3>
+                <p class="text-secondary text-sm mb-4 line-clamp-2">Building scalable systems and developer tools. Open source contributor.</p>
+                <div class="flex flex-wrap gap-2 mb-4">
+                    <span class="px-3 py-1 glass-light rounded-full text-xs">Ruby</span>
+                    <span class="px-3 py-1 glass-light rounded-full text-xs">Go</span>
+                    <span class="px-3 py-1 glass-light rounded-full text-xs">Kubernetes</span>
+                </div>
+                <div class="flex items-center justify-between text-sm text-secondary mb-4">
+                    <span><i class="fas fa-star"></i> 5.1k</span>
+                    <span><i class="fas fa-fire"></i> 120 day streak</span>
+                    <span><i class="fas fa-repo"></i> 89 repos</span>
+                </div>
+                <div class="border-t border-border pt-4">
+                    <p class="text-xs text-secondary mb-2">Top Repository</p>
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-folder text-sm"></i>
+                        <span class="text-sm font-medium">hub-toolkit</span>
+                    </div>
+                </div>
+                <a href="#" class="btn-primary w-full justify-center mt-4">
+                    View Profile <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            
+            <!-- Developer Card 3 -->
+            <div class="card glow-hover">
+                <div class="flex items-start justify-between mb-4">
+                    <img src="https://avatars.githubusercontent.com/u/3?v=4" alt="Developer" class="w-16 h-16 rounded-full border-2 border-border">
+                    <i class="fab fa-github text-2xl text-secondary"></i>
+                </div>
+                <h3 class="font-semibold text-lg mb-1">@mojombo</h3>
+                <p class="text-secondary text-sm mb-4 line-clamp-2">Open source contributor and tech entrepreneur. Love building products.</p>
+                <div class="flex flex-wrap gap-2 mb-4">
+                    <span class="px-3 py-1 glass-light rounded-full text-xs">JavaScript</span>
+                    <span class="px-3 py-1 glass-light rounded-full text-xs">TypeScript</span>
+                    <span class="px-3 py-1 glass-light rounded-full text-xs">Vue</span>
+                </div>
+                <div class="flex items-center justify-between text-sm text-secondary mb-4">
+                    <span><i class="fas fa-star"></i> 3.8k</span>
+                    <span><i class="fas fa-fire"></i> 89 day streak</span>
+                    <span><i class="fas fa-repo"></i> 52 repos</span>
+                </div>
+                <div class="border-t border-border pt-4">
+                    <p class="text-xs text-secondary mb-2">Top Repository</p>
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-folder text-sm"></i>
+                        <span class="text-sm font-medium">vue-components</span>
+                    </div>
+                </div>
+                <a href="#" class="btn-primary w-full justify-center mt-4">
+                    View Profile <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            
+            <!-- Developer Card 4 -->
+            <div class="card glow-hover">
+                <div class="flex items-start justify-between mb-4">
+                    <img src="https://avatars.githubusercontent.com/u/4?v=4" alt="Developer" class="w-16 h-16 rounded-full border-2 border-border">
+                    <i class="fab fa-github text-2xl text-secondary"></i>
+                </div>
+                <h3 class="font-semibold text-lg mb-1">@pjhyett</h3>
+                <p class="text-secondary text-sm mb-4 line-clamp-2">Backend specialist focused on distributed systems and databases.</p>
+                <div class="flex flex-wrap gap-2 mb-4">
+                    <span class="px-3 py-1 glass-light rounded-full text-xs">Rust</span>
+                    <span class="px-3 py-1 glass-light rounded-full text-xs">PostgreSQL</span>
+                    <span class="px-3 py-1 glass-light rounded-full text-xs">Redis</span>
+                </div>
+                <div class="flex items-center justify-between text-sm text-secondary mb-4">
+                    <span><i class="fas fa-star"></i> 1.9k</span>
+                    <span><i class="fas fa-fire"></i> 67 day streak</span>
+                    <span><i class="fas fa-repo"></i> 34 repos</span>
+                </div>
+                <div class="border-t border-border pt-4">
+                    <p class="text-xs text-secondary mb-2">Top Repository</p>
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-folder text-sm"></i>
+                        <span class="text-sm font-medium">db-optimizer</span>
+                    </div>
+                </div>
+                <a href="#" class="btn-primary w-full justify-center mt-4">
+                    View Profile <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            
+            <!-- Developer Card 5 -->
+            <div class="card glow-hover">
+                <div class="flex items-start justify-between mb-4">
+                    <img src="https://avatars.githubusercontent.com/u/5?v=4" alt="Developer" class="w-16 h-16 rounded-full border-2 border-border">
+                    <i class="fab fa-github text-2xl text-secondary"></i>
+                </div>
+                <h3 class="font-semibold text-lg mb-1">@wycats</h3>
+                <p class="text-secondary text-sm mb-4 line-clamp-2">Frontend architect. Creator of popular JavaScript frameworks and tools.</p>
+                <div class="flex flex-wrap gap-2 mb-4">
+                    <span class="px-3 py-1 glass-light rounded-full text-xs">JavaScript</span>
+                    <span class="px-3 py-1 glass-light rounded-full text-xs">Ember</span>
+                    <span class="px-3 py-1 glass-light rounded-full text-xs">Rust</span>
+                </div>
+                <div class="flex items-center justify-between text-sm text-secondary mb-4">
+                    <span><i class="fas fa-star"></i> 8.2k</span>
+                    <span><i class="fas fa-fire"></i> 200+ day streak</span>
+                    <span><i class="fas fa-repo"></i> 120 repos</span>
+                </div>
+                <div class="border-t border-border pt-4">
+                    <p class="text-xs text-secondary mb-2">Top Repository</p>
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-folder text-sm"></i>
+                        <span class="text-sm font-medium">ember-source</span>
+                    </div>
+                </div>
+                <a href="#" class="btn-primary w-full justify-center mt-4">
+                    View Profile <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            
+            <!-- Developer Card 6 -->
+            <div class="card glow-hover">
+                <div class="flex items-start justify-between mb-4">
+                    <img src="https://avatars.githubusercontent.com/u/6?v=4" alt="Developer" class="w-16 h-16 rounded-full border-2 border-border">
+                    <i class="fab fa-github text-2xl text-secondary"></i>
+                </div>
+                <h3 class="font-semibold text-lg mb-1">@tenderlove</h3>
+                <p class="text-secondary text-sm mb-4 line-clamp-2">Ruby core team member. Database expert and performance enthusiast.</p>
+                <div class="flex flex-wrap gap-2 mb-4">
+                    <span class="px-3 py-1 glass-light rounded-full text-xs">Ruby</span>
+                    <span class="px-3 py-1 glass-light rounded-full text-xs">Rails</span>
+                    <span class="px-3 py-1 glass-light rounded-full text-xs">SQL</span>
+                </div>
+                <div class="flex items-center justify-between text-sm text-secondary mb-4">
+                    <span><i class="fas fa-star"></i> 4.5k</span>
+                    <span><i class="fas fa-fire"></i> 156 day streak</span>
+                    <span><i class="fas fa-repo"></i> 78 repos</span>
+                </div>
+                <div class="border-t border-border pt-4">
+                    <p class="text-xs text-secondary mb-2">Top Repository</p>
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-folder text-sm"></i>
+                        <span class="text-sm font-medium">activerecord</span>
+                    </div>
+                </div>
+                <a href="#" class="btn-primary w-full justify-center mt-4">
+                    View Profile <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+        
+        <!-- Pagination -->
+        <div class="flex justify-center mt-12">
+            <div class="flex items-center gap-2">
+                <button class="px-4 py-2 glass-light rounded-lg text-secondary hover:text-white transition-all">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="px-4 py-2 bg-white text-black rounded-lg font-medium">1</button>
+                <button class="px-4 py-2 glass-light rounded-lg text-secondary hover:text-white transition-all">2</button>
+                <button class="px-4 py-2 glass-light rounded-lg text-secondary hover:text-white transition-all">3</button>
+                <span class="text-secondary">...</span>
+                <button class="px-4 py-2 glass-light rounded-lg text-secondary hover:text-white transition-all">10</button>
+                <button class="px-4 py-2 glass-light rounded-lg text-secondary hover:text-white transition-all">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+        const menu = document.getElementById('mobile-menu');
+        menu.classList.toggle('active');
+    });
+</script>
+{% endblock %}

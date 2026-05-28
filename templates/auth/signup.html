@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+
+{% block title %}Sign Up | DHH{% endblock %}
+
+{% block content %}
+<div class="min-h-screen flex">
+    <!-- Left Side - Branding -->
+    <div class="hidden lg:flex lg:w-1/2 relative items-center justify-center p-12">
+        <!-- Animated Background -->
+        <div class="absolute inset-0 overflow-hidden">
+            <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(circle at 2px 2px, #ffffff 1px, transparent 0); background-size: 40px 40px;"></div>
+            
+            <!-- Floating Icons -->
+            <i class="fas fa-laptop-code absolute text-6xl text-secondary opacity-20 float" style="top: 15%; left: 15%;"></i>
+            <i class="fas fa-terminal absolute text-5xl text-secondary opacity-20 float" style="top: 35%; right: 10%; animation-delay: 0.7s;"></i>
+            <i class="fab fa-react absolute text-7xl text-secondary opacity-20 float" style="bottom: 25%; left: 25%; animation-delay: 1.2s;"></i>
+            <i class="fab fa-node absolute text-5xl text-secondary opacity-20 float" style="bottom: 45%; right: 15%; animation-delay: 1.8s;"></i>
+        </div>
+        
+        <div class="relative z-10 text-center">
+            <div class="flex items-center justify-center gap-3 mb-6">
+                <i class="fas fa-code text-4xl glow-text"></i>
+                <span class="font-poppins font-bold text-4xl">DHH</span>
+            </div>
+            <h1 class="font-poppins text-4xl font-bold mb-4">Join DHH</h1>
+            <p class="text-secondary text-lg max-w-md">
+                Show your skills through real code and get discovered by top companies
+            </p>
+        </div>
+    </div>
+    
+    <!-- Right Side - Signup Form -->
+    <div class="w-full lg:w-1/2 flex items-center justify-center p-6 md:p-12">
+        <div class="w-full max-w-md">
+            <!-- Glassmorphism Card -->
+            <div class="glass rounded-2xl p-8 glow-hover">
+                <div class="text-center mb-8">
+                    <h2 class="font-poppins text-2xl font-bold mb-2">Create Account</h2>
+                    <p class="text-secondary">Start showcasing your code today</p>
+                </div>
+                
+                <!-- Social Signup Buttons -->
+                <div class="space-y-4 mb-6">
+                    <button class="btn-google">
+                        <i class="fab fa-google text-xl"></i>
+                        Sign up with Google
+                    </button>
+                    
+                    <button class="btn-github">
+                        <i class="fab fa-github text-xl"></i>
+                        Sign up with GitHub
+                    </button>
+                </div>
+                
+                <!-- Divider -->
+                <div class="relative my-6">
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="w-full border-t border-border"></div>
+                    </div>
+                    <div class="relative flex justify-center text-sm">
+                        <span class="px-4 bg-card text-secondary">or sign up with email</span>
+                    </div>
+                </div>
+                
+                <!-- Email Signup Form -->
+                <form method="post" action="{% url 'signup' %}">
+                    {% csrf_token %}
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm text-secondary mb-2">Full Name</label>
+                            <input type="text" name="name" class="input-dark" placeholder="John Doe" required>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm text-secondary mb-2">Email</label>
+                            <input type="email" name="email" class="input-dark" placeholder="you@example.com" required>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm text-secondary mb-2">Password</label>
+                            <input type="password" name="password" class="input-dark" placeholder="••••••••" minlength="8" required>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm text-secondary mb-2">GitHub Username (Optional)</label>
+                            <input type="text" name="github_username" class="input-dark" placeholder="your-username">
+                        </div>
+                        
+                        <div class="flex items-start gap-2">
+                            <input type="checkbox" id="terms" class="rounded border-border bg-input mt-1" required>
+                            <label for="terms" class="text-sm text-secondary">
+                                I agree to the <a href="#" class="text-white hover:underline">Terms of Service</a> and <a href="#" class="text-white hover:underline">Privacy Policy</a>
+                            </label>
+                        </div>
+                        
+                        <button type="submit" class="btn-primary w-full justify-center">
+                            Create Account
+                        </button>
+                    </div>
+                </form>
+                
+                <!-- Login Link -->
+                <p class="text-center mt-6 text-secondary">
+                    Already have an account? 
+                    <a href="{% url 'login' %}" class="text-white hover:underline">Sign in</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
