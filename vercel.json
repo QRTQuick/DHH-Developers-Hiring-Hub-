@@ -4,16 +4,12 @@
     {
       "src": "api/index.py",
       "use": "@vercel/python"
-    },
-    {
-      "src": "DHH/DeveloperHieringHub/static/**",
-      "use": "@vercel/static"
     }
   ],
   "routes": [
     {
       "src": "/static/(.*)",
-      "dest": "DHH/DeveloperHieringHub/static/$1"
+      "dest": "/static/$1"
     },
     {
       "src": "/(.*)",
